@@ -1,0 +1,119 @@
+/* CalendarPage.css */
+
+.app-wrapper {
+  width: 100%;
+  /* background-color: aquamarine;
+  border: 5px solid black; */
+}
+
+.calendar-wrapper * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.calendar-wrapper {
+  padding: 20px;
+  /* background-image: url('/autumn-bg.jpg'); */
+  background-color: #F6F7F9;
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  font-family: 'inter', sans-serif, Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+ .top-bar {
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 50px;
+  border-top: 1px solid #d6dbe1;
+  border-bottom: 1px solid #d6dbe1;
+  flex-wrap: wrap;
+}
+
+.top-bar button {
+  background-color: white;
+  border: 2px solid rgb(226 232 240 / var(--tw-border-opacity, 1));
+  border-radius: 8px;
+  padding: 8px 16px;
+  margin: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); */
+  color: rgb(45 67 109 / var(--tw-text-opacity, 1));
+}
+
+
+.top-bar button:hover {
+  border: 2px solid #b4b4b4;
+}
+
+
+/*  fc = FullCalender bg / Calender Root element  */
+.fc {
+  /* background-color: rgba(255, 255, 255, 0.9); */
+  background-image: url('/autumn-bg.jpg');
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background-size: cover; 
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+}
+
+/*  DAY CELLS */
+.fc-daygrid-day {
+  padding: 0;
+  background: white;
+}
+
+
+/* Month OUTSIDE DAYS */
+.fc-day-other {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+
+.fc-daygrid-day-number {
+  font-weight: bold;
+  font-size: 14px;
+  padding-left: 4px;
+}
+
+.fc-daygrid-event {
+  margin-top: 4px;
+  padding-left: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+textarea.day-note {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 13px;
+  margin-bottom: 4px;
+  resize: none;
+}
+
+/* WEEK ROW BACKGROUND */
+.fc-col-header-cell {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px;
+}
+
+.fc-day-today {
+  background-color: rgb(230, 255, 246) !important;
+}
+
+.fc-event {
+  background-color: #F6F7F9;
+}
