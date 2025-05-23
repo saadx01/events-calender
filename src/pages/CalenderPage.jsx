@@ -9,23 +9,59 @@ import './CalendarPage.css';
 
 export default function CalendarPage() {
   const [events, setEvents] = useState(dummyEvents);
+  const [userNotes, setUserNotes] = useState({});
 
-  function renderEventContent(eventInfo) {
+  const handleNoteChange = (dateStr, value) => {
+    setUserNotes(prev => ({
+      ...prev,
+      [dateStr]: value
+    }));
+  };
+
+  const saveNoteToDatabase = (dateStr, value) => {
+    console.log(`Saved note for ${dateStr}:`, value);
+    // TODO: Integrate with your backend here
+  };
+
+  const renderEventContent = (eventInfo) => {
+    const category = eventInfo.event.extendedProps.category;
+    const color = getColor(category);
+    if (category === 'user') return null;
+
     return (
-      <div style={{ color: getColor(eventInfo.event.extendedProps.category) }}>
+      <div style={{ color }} className="fc-event-custom">
         {eventInfo.event.title}
       </div>
     );
-  }
+  };
 
   function getColor(category) {
     const colors = {
       business: 'blue',
       personal: 'green',
       creative: 'orange',
+      user: 'purple'
     };
     return colors[category] || 'black';
   }
+
+
+  const renderDayCellContent = (arg) => {
+    const dateStr = arg.date.toISOString().split('T')[0];
+
+    return (
+      <div className="fc-day-inner-wrapper">
+        <div className="fc-day-number">{arg.dayNumberText}</div>
+        <textarea
+          className="day-note"
+          placeholder="Add text..."
+          value={userNotes[dateStr] || ''}
+          onChange={(e) => handleNoteChange(dateStr, e.target.value)}
+          onBlur={(e) => saveNoteToDatabase(dateStr, e.target.value)}
+        />
+      </div>
+    );
+  };
 
   return (
     <div className="app-wrapper">
@@ -36,18 +72,10 @@ export default function CalendarPage() {
           initialView="dayGridMonth"
           events={events}
           eventContent={renderEventContent}
-          headerToolbar={
-            {
-              start: 'today prev,next', // will normally be on the left. if RTL, will be on the right
-              center: 'title',
-              end: 'dayGridMonth dayGridWeek' // will normally be on the right. if RTL, will be on the left
-            }
-          }
-          // headerToolbar={false} // we use custom buttons
-          // height={'100vh'}
+          dayCellContent={renderDayCellContent}
+          headerToolbar={false}
         />
       </div>
     </div>
-      
   );
 }

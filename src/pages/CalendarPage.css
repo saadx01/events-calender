@@ -56,8 +56,8 @@
 
 /*  fc = FullCalender bg / Calender Root element  */
 .fc {
-  /* background-color: rgba(255, 255, 255, 0.9); */
-  background-image: url('/autumn-bg.jpg');
+  background-color: rgba(255, 255, 255, 0.9);
+  /* background-image: url('/autumn-bg.jpg'); */
   border-radius: 16px;
   padding: 15px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -93,7 +93,7 @@
   font-weight: 600;
 }
 
-textarea.day-note {
+/* textarea.day-note {
   width: 100%;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -101,7 +101,7 @@ textarea.day-note {
   font-size: 13px;
   margin-bottom: 4px;
   resize: none;
-}
+} */
 
 /* WEEK ROW BACKGROUND */
 .fc-col-header-cell {
@@ -116,4 +116,31 @@ textarea.day-note {
 
 .fc-event {
   background-color: #F6F7F9;
+}
+
+
+
+.fc-day-inner-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.fc-day-number {
+  font-weight: bold;
+  font-size: 14px;
+  padding: 4px 0 4px 4px;
+}
+
+textarea.day-note {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 13px;
+  resize: none;
+  font-family: inherit;
+  background-color: white;
+  z-index: 10;
+  margin-bottom: 4px;
 }
