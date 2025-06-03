@@ -3,24 +3,35 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import Modal from 'react-modal';
 import dummyEvents from '../data/dummyEvents';
 import TopButtons from '../components/TopButtons';
 import './CalendarPage.css';
 
+Modal.setAppElement('#root'); // Add this for accessibility
+
 export default function CalendarPage() {
   const [events, setEvents] = useState(dummyEvents);
   const [userNotes, setUserNotes] = useState({});
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [modalNote, setModalNote] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleNoteChange = (dateStr, value) => {
-    setUserNotes(prev => ({
-      ...prev,
-      [dateStr]: value
-    }));
+  const handleDateClick = (arg) => {
+    const dateStr = arg.dateStr;
+    setSelectedDate(dateStr);
+    setModalNote(userNotes[dateStr] || '');
+    setIsModalOpen(true);
   };
 
-  const saveNoteToDatabase = (dateStr, value) => {
-    console.log(`Saved note for ${dateStr}:`, value);
-    // TODO: Integrate with your backend here
+  const handleSaveNote = () => {
+    setUserNotes(prev => ({
+      ...prev,
+      [selectedDate]: modalNote
+    }));
+    setIsModalOpen(false);
+    console.log(`Saved note for ${selectedDate}: ${modalNote}`);
+    // TODO: save to backend
   };
 
   const renderEventContent = (eventInfo) => {
@@ -35,30 +46,16 @@ export default function CalendarPage() {
     );
   };
 
-  function getColor(category) {
-    const colors = {
-      business: 'blue',
-      personal: 'green',
-      creative: 'orange',
-      user: 'purple'
-    };
-    return colors[category] || 'black';
-  }
-
-
   const renderDayCellContent = (arg) => {
-    const dateStr = arg.date.toISOString().split('T')[0];
-
+    const dateStr = arg.date.toLocaleDateString('en-CA'); // YYYY-MM-DD format
     return (
       <div className="fc-day-inner-wrapper">
         <div className="fc-day-number">{arg.dayNumberText}</div>
-        <textarea
-          className="day-note"
-          placeholder="Add text..."
-          value={userNotes[dateStr] || ''}
-          onChange={(e) => handleNoteChange(dateStr, e.target.value)}
-          onBlur={(e) => saveNoteToDatabase(dateStr, e.target.value)}
-        />
+        {userNotes[dateStr] ?
+          <div className="day-note-preview">{userNotes[dateStr]}</div>
+          :
+          <div className="day-note-instruction">Add Text...</div>
+        }
       </div>
     );
   };
@@ -73,9 +70,44 @@ export default function CalendarPage() {
           events={events}
           eventContent={renderEventContent}
           dayCellContent={renderDayCellContent}
-          headerToolbar={false}
+          headerToolbar={
+            {
+              start: 'title', // will normally be on the left. if RTL, will be on the right
+              center: '',
+              end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
+            }
+          }
+          dateClick={handleDateClick}
         />
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        className="note-modal"
+        overlayClassName="modal-overlay"
+      >
+        <h2 className="modal-title">Note - {selectedDate}</h2>
+        <textarea
+          rows={6}
+          value={modalNote}
+          onChange={(e) => setModalNote(e.target.value)}
+        />
+        <div className="modal-buttons">
+          <button className='save-btn' onClick={handleSaveNote}>Save</button>
+          <button className='cancel-btn' onClick={() => setIsModalOpen(false)}>Cancel</button>
+        </div>
+      </Modal>
     </div>
   );
+}
+
+function getColor(category) {
+  const colors = {
+    business: 'blue',
+    personal: 'green',
+    creative: 'orange',
+    user: 'purple'
+  };
+  return colors[category] || 'black';
 }

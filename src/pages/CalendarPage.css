@@ -6,10 +6,11 @@
   border: 5px solid black; */
 }
 
-.calendar-wrapper * {
+.app-wrapper * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'inter', sans-serif, Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .calendar-wrapper {
@@ -19,11 +20,10 @@
   background-size: cover;
   background-position: center;
   min-height: 100vh;
-  font-family: 'inter', sans-serif, Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
 }
 
 
- .top-bar {
+.top-bar {
   background-color: rgb(255, 255, 255);
   display: flex;
   align-items: center;
@@ -60,8 +60,8 @@
   /* background-image: url('/autumn-bg.jpg'); */
   border-radius: 16px;
   padding: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  background-size: cover; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   width: 100%;
@@ -84,6 +84,7 @@
   font-weight: bold;
   font-size: 14px;
   padding-left: 4px;
+  width: 100%;
 }
 
 .fc-daygrid-event {
@@ -124,6 +125,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  width: 100%;
 }
 
 .fc-day-number {
@@ -132,7 +134,7 @@
   padding: 4px 0 4px 4px;
 }
 
-textarea.day-note {
+.day-note-preview {
   width: 100%;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -144,3 +146,69 @@ textarea.day-note {
   z-index: 10;
   margin-bottom: 4px;
 }
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+.note-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  font-family: 'inter', sans-serif, Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.note-modal textarea {
+  width: 100%;
+  /* padding: 8px; */
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-buttons button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: #F0F0F0;
+  transition: background-color 0.2s ease;
+}
+
+.modal-buttons button:hover {
+  background-color: #ccc;
+}
+
+.modal-buttons {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.day-note-instruction {
+  color:#b4b4b4;
+  font-weight: lighter;
+  align-self: flex-start;
+}
+
+/* .fc-day-inner-wrapper *, .fc-event-custom{
+  font-size: 40px;
+  text-wrap: wrap;
+} */
