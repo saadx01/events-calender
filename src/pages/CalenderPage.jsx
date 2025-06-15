@@ -1,21 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import Modal from 'react-modal';
-import dummyEvents from '../data/dummyEvents';
+// import dummyEvents from '../data/dummyEvents';
 import TopButtons from '../components/TopButtons';
 import './CalendarPage.css';
+import axios from 'axios';
 
-Modal.setAppElement('#root'); // Add this for accessibility
+Modal.setAppElement('#root');
 
 export default function CalendarPage() {
-  const [events, setEvents] = useState(dummyEvents);
+  const [events, setEvents] = useState([]);
   const [userNotes, setUserNotes] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
   const [modalNote, setModalNote] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+useEffect(() => {
+  const fetchCalendarData = async () => {
+    try {
+      const res = await axios.get('https://newstaging.memorylanetherapy.com/wp-json/activities/v1/search', {
+        withCredentials: true
+      });
+
+      const formatDate = (str) => {
+        if (!str) return null;
+        return str.includes('/')
+          ? str.replace(/\//g, '-')
+          : `${str.slice(0, 4)}-${str.slice(4, 6)}-${str.slice(6, 8)}`;
+      };
+
+      const allEvents = [];
+      const notesMap = {};
+
+      // General activities
+      res.data.activities?.forEach(ev => {
+        allEvents.push({
+          title: ev.name,
+          start: formatDate(ev.date),
+          url: ev.link,
+          color: ev.color,
+          category: 'activity'
+        });
+      });
+
+      // Custom calendar events
+      res.data.calendar_custom_events?.forEach(ev => {
+        allEvents.push({
+          title: ev.title,
+          start: formatDate(ev.date),
+          color: ev.color || '#7bb591',
+          category: ev.category || 'custom'
+        });
+      });
+
+      // Member notes → store in userNotes state
+      res.data.member_events?.forEach(ev => {
+        const date = formatDate(ev.date);
+        if (date) {
+          notesMap[date] = ev.title || ''; // Save note content by date
+        }
+      });
+
+      setEvents(allEvents);
+      setUserNotes(notesMap);
+
+    } catch (error) {
+      console.error('Error fetching calendar data:', error);
+    }
+  };
+
+  fetchCalendarData();
+}, []);
+
+
+
 
   const handleDateClick = (arg) => {
     const dateStr = arg.dateStr;
