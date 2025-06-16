@@ -8,19 +8,5 @@ export default function TopButtons() {
           <button>Design</button>
           <button>Download</button>
     </div>
-
-    // <div className="top-bar">
-    //     <div id='top-bar-left'>
-    //       <div id='for-spacing'></div>
-    //     </div>
-    //     <div id='top-bar-center'>
-    //       <button>Theme</button>
-    //       <button>Content</button>
-    //       <button>Design</button>
-    //     </div>
-    //     <div id='top-bar-right'>
-    //         <button>Download</button>
-    //     </div>
-    // </div>
   );
 }
