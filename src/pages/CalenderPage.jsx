@@ -17,6 +17,8 @@ export default function CalendarPage() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [modalNote, setModalNote] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [backgroundImage, setBackgroundImage] = useState(null);
+
 
   useEffect(() => {
     const fetchCalendarData = async () => {
@@ -181,9 +183,23 @@ export default function CalendarPage() {
     );
   };
 
+  // Changing background image
+  const applyBackgroundToCalendar = (imageUrl) => {
+    const calendarEl = document.querySelector(".fc");
+    if (calendarEl) {
+      calendarEl.style.backgroundImage = `url("${imageUrl}")`;
+    }
+  };
+
+  useEffect(() => {
+    if (backgroundImage) {
+      applyBackgroundToCalendar(backgroundImage);
+    }
+  }, [backgroundImage]);
+
   return (
     <div className="app-wrapper">
-      <TopButtons />
+      <TopButtons onThemeSelected={(url) => setBackgroundImage(url)} />
       <div className="calendar-wrapper">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
