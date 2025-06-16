@@ -107,9 +107,11 @@
 
 /* WEEK ROW BACKGROUND */
 .fc-col-header-cell {
-  background-color: rgba(0, 0, 0, 0.5);
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  background-color: var(--global-palette8);
   color: white;
   padding: 10px;
+  height: 60px !important;
 }
 
 .fc-day-today {
@@ -227,3 +229,19 @@
   font-size: 40px;
   text-wrap: wrap;
 } */
+
+
+th.fc-col-header-cell.fc-day a {
+    color: white !important;
+}
+
+.fc-col-header-cell .fc-scrollgrid-sync-inner {
+    display: flex;
+    align-items: center !important;
+    justify-content: center;
+    height: 100%;
+}
+
+.fc-day-number, .day-note-preview {
+    color: var(--global-palette4) !important;
+}
