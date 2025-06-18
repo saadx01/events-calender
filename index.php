@@ -21,9 +21,9 @@ function enqueue_vite_react_app() {
     $plugin_url = plugin_dir_url(__FILE__) . 'react-app/';
 
     // ✅ Replace with your actual Vite build filenames
-    echo '<link rel="stylesheet" href="' . $plugin_url . 'assets/index-C9w18lB1.css">';
+    echo '<link rel="stylesheet" href="' . $plugin_url . 'assets/index-DSohTHz8.css">';
     echo '<div id="root"></div>';
-    echo '<script type="module" src="' . $plugin_url . 'assets/index-D7b7Yr6B.js"></script>';
+    echo '<script type="module" src="' . $plugin_url . 'assets/index-C4cu1WES.js"></script>';
 
     enqueue_scripts();
 }
