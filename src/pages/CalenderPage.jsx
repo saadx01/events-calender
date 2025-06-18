@@ -95,7 +95,7 @@ export default function CalendarPage() {
 const handleSaveNote = async () => {
   setIsSaving(true);
   try {
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // await new Promise(resolve => setTimeout(resolve, 2000));
     const result = await saveNoteToBackend(selectedDate, modalNote, noteIdsMap[selectedDate]);
 
     setUserNotes(prev => ({
