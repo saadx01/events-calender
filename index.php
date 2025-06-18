@@ -18,7 +18,7 @@
 }
 
 function enqueue_vite_react_app() {
-    $plugin_url = plugin_dir_url(_FILE_) . 'react-app/';
+    $plugin_url = plugin_dir_url(__FILE__) . 'react-app/';
 
     // ✅ Replace with your actual Vite build filenames
     echo '<link rel="stylesheet" href="' . $plugin_url . 'assets/index-C9w18lB1.css">';

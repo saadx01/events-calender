@@ -30,7 +30,7 @@ export default function TopButtons({ onThemeSelected }) {
 
       const data = await res.json();
       if (data?.path) {
-        onThemeSelected(data.path); // send to CalendarPage
+        setBackgroundImage(data.path); // send to CalendarPage
       }
     } catch (err) {
       console.error("Theme upload failed:", err);
@@ -39,10 +39,9 @@ export default function TopButtons({ onThemeSelected }) {
 
   return (
     <div className="top-bar">
-      <button onClick={handleThemeClick}>Theme</button>
-      <button>Content</button>
-      <button>Design</button>
-      <button>Download</button>
+      <button className='button-effect' onClick={handleThemeClick}>Change<br />Background</button>
+      <button className='button-effect'>Filter<br />Activities</button>
+      <button className='button-effect'>Download<br />Calendar</button>
 
       <input
         type="file"

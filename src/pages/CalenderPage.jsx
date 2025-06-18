@@ -18,12 +18,15 @@ export default function CalendarPage() {
   const [modalNote, setModalNote] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [backgroundImage, setBackgroundImage] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+
 
 
   useEffect(() => {
     const fetchCalendarData = async () => {
       try {
-        const res = await axios.get('https://newstaging.memorylanetherapy.com/wp-json/activities/v1/search', {
+        // const res = await axios.get('https://newstaging.memorylanetherapy.com/wp-json/activities/v1/search', {
+        const res = await axios.get(`${ar_event_calendar_data.root_url}/wp-json/activities/v1/search`, {
           withCredentials: true
         });
 
@@ -69,6 +72,11 @@ export default function CalendarPage() {
         setUserNotes(notesMap);
         setNoteIdsMap(idsMap);
 
+      // Extract and set calendar background image
+      if (res.data.calendar_bg) {
+        setBackgroundImage(res.data.calendar_bg);
+      }
+
       } catch (error) {
         console.error('Error fetching calendar data:', error);
       }
@@ -84,36 +92,41 @@ export default function CalendarPage() {
     setIsModalOpen(true);
   };
 
-  const handleSaveNote = async () => {
-    try {
-      const result = await saveNoteToBackend(selectedDate, modalNote, noteIdsMap[selectedDate]);
+const handleSaveNote = async () => {
+  setIsSaving(true);
+  try {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    const result = await saveNoteToBackend(selectedDate, modalNote, noteIdsMap[selectedDate]);
 
-      setUserNotes(prev => ({
+    setUserNotes(prev => ({
+      ...prev,
+      [selectedDate]: modalNote
+    }));
+
+    if (modalNote.trim() === '') {
+      const updatedMap = { ...userNotes };
+      delete updatedMap[selectedDate];
+      setUserNotes(updatedMap);
+      setNoteIdsMap(prev => {
+        const copy = { ...prev };
+        delete copy[selectedDate];
+        return copy;
+      });
+    } else if (result?.id) {
+      setNoteIdsMap(prev => ({
         ...prev,
-        [selectedDate]: modalNote
+        [selectedDate]: result.id
       }));
-
-      if (modalNote.trim() === '') {
-        const updatedMap = { ...userNotes };
-        delete updatedMap[selectedDate];
-        setUserNotes(updatedMap);
-        setNoteIdsMap(prev => {
-          const copy = { ...prev };
-          delete copy[selectedDate];
-          return copy;
-        });
-      } else if (result?.id) {
-        setNoteIdsMap(prev => ({
-          ...prev,
-          [selectedDate]: result.id
-        }));
-      }
-
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error('Error saving user note:', error);
     }
-  };
+
+    setIsModalOpen(false);
+  } catch (error) {
+    console.error('Error saving user note:', error);
+  } finally {
+    setIsSaving(false);
+  }
+};
+
 
   const saveNoteToBackend = async (date, value, noteId = null) => {
     if (!window.ar_event_calendar_data) {
@@ -199,7 +212,7 @@ export default function CalendarPage() {
 
   return (
     <div className="app-wrapper">
-      <TopButtons onThemeSelected={(url) => setBackgroundImage(url)} />
+      <TopButtons setBackgroundImage={(url) => setBackgroundImage(url)} />
       <div className="calendar-wrapper">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -222,16 +235,31 @@ export default function CalendarPage() {
         className="note-modal"
         overlayClassName="modal-overlay"
       >
-        <h2 className="modal-title">Note - {selectedDate}</h2>
+        <div className="modal_heading">
+          <h5 className="modal-title">📃 Add Note here</h5>
+          <p className="note-modal-date">
+            {selectedDate ? new Date(selectedDate).toLocaleDateString('en-GB', {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric'
+            }) : ''}
+          </p>
+        </div>
+
         <textarea
           rows={6}
           value={modalNote}
           onChange={(e) => setModalNote(e.target.value)}
         />
         <div className="modal-buttons">
-          <button className='save-btn' onClick={handleSaveNote}>Save</button>
-          <button className='cancel-btn' onClick={() => setIsModalOpen(false)}>Cancel</button>
+          <button className='save-btn' onClick={handleSaveNote} disabled={isSaving}>
+            {isSaving ? <span className="loader"></span> : 'Save'}
+          </button>
+          <button className='cancel-btn' onClick={() => setIsModalOpen(false)} disabled={isSaving}>
+            Cancel
+          </button>
         </div>
+
       </Modal>
     </div>
   );

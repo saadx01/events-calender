@@ -36,8 +36,8 @@
 }
 
 .top-bar button {
-  background-color: white;
-  border: 2px solid rgb(226 232 240 / var(--tw-border-opacity, 1));
+  /* background-color: white;
+  border: 2px solid rgb(226 232 240 / var(--tw-border-opacity, 1)); */
   border-radius: 8px;
   padding: 8px 16px;
   margin: 10px;
@@ -109,6 +109,7 @@
 .fc-col-header-cell {
   /* background-color: rgba(0, 0, 0, 0.5); */
   background-color: var(--global-palette8);
+  /* color available only in wordpress theme */
   color: white;
   padding: 10px;
   height: 60px !important;
@@ -148,12 +149,16 @@
   background-color: white;
   z-index: 10;
   margin-bottom: 4px;
-  white-space: pre-wrap;     /* Allow text to wrap */
-  overflow: visible;       /* Let content show outside if necessary */
-  text-overflow: unset;    /* No ellipsis */
+  white-space: pre-wrap;
+  /* Allow text to wrap */
+  overflow: visible;
+  /* Let content show outside if necessary */
+  text-overflow: unset;
+  /* No ellipsis */
   word-wrap: break-word;
-  max-height: 60px;         /* Optional: control height */
-  overflow-y: auto;   
+  max-height: 60px;
+  /* Optional: control height */
+  overflow-y: auto;
 }
 
 
@@ -197,12 +202,15 @@
   font-weight: 500;
   cursor: pointer;
   font-size: 14px;
-  background-color: #F0F0F0;
-  transition: background-color 0.2s ease;
+  /* background-color: #F0F0F0;
+  transition: background-color 0.2s ease; */
+  background-color: var(--global-palette-btn-bg) !important;
+  transition: background-color .2s ease !important;
 }
 
 .modal-buttons button:hover {
-  background-color: #ccc;
+  /* background-color: #ccc; */
+  background-color: var(--global-palette-btn-bg-hover) !important;
 }
 
 .modal-buttons {
@@ -211,20 +219,80 @@
   gap: 1rem;
 }
 
+.note-modal-date {
+  background-color: var(--global-palette-btn-bg) !important;
+  padding: 0 10px !important;
+  border-radius: 15px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: white !important;
+}
+
+.modal_heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+
+.loader {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+.loader::after,
+.loader::before {
+  content: '';  
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #FFF;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: animloader 2s linear infinite;
+}
+.loader::after {
+  animation-delay: 1s;
+}
+
+@keyframes animloader {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+
+
+
+
 .day-note-instruction {
-  color:#b4b4b4;
+  color: #b4b4b4;
   font-weight: lighter;
   align-self: flex-start;
 }
 
-.fc-event-custom{
-  white-space: pre-wrap;     /* Allow text to wrap */
-  overflow: visible;       /* Let content show outside if necessary */
-  text-overflow: unset;    /* No ellipsis */
+.fc-event-custom {
+  white-space: pre-wrap;
+  /* Allow text to wrap */
+  overflow: visible;
+  /* Let content show outside if necessary */
+  text-overflow: unset;
+  /* No ellipsis */
   word-wrap: break-word;
-  max-height: 60px;         /* Optional: control height */
+  max-height: 60px;
+  /* Optional: control height */
   overflow-y: auto;
 }
+
 /* .fc-day-inner-wrapper *, .fc-event-custom{
   font-size: 40px;
   text-wrap: wrap;
@@ -232,16 +300,103 @@
 
 
 th.fc-col-header-cell.fc-day a {
-    color: white !important;
+  color: white !important;
 }
 
 .fc-col-header-cell .fc-scrollgrid-sync-inner {
-    display: flex;
-    align-items: center !important;
-    justify-content: center;
-    height: 100%;
+  display: flex;
+  align-items: center !important;
+  justify-content: center;
+  height: 100%;
 }
 
-.fc-day-number, .day-note-preview {
-    color: var(--global-palette4) !important;
+
+
+
+/* Styling based on wordpress theme */
+
+.fc-day-number,
+.day-note-preview {
+  color: var(--global-palette4) !important;
+}
+
+a.fc-daygrid-day-number {
+  color: var(--global-palette4) !important;
+}
+
+.button-effect {
+  border-color: var(--global-palette-btn-bg-hover, #1768ea) !important;
+  border-top-color: rgb(223, 86, 6) !important;
+  border-right-color: rgb(223, 86, 64) !important;
+  border-bottom-color: rgb(223, 86, 64) !important;
+  border-left-color: rgb(223, 86, 64) !important;
+  color: var(--global-palette-btn-hover, #ffffff) !important;
+  background: var(--global-palette-btn-bg-hover, #1768ea) !important;
+
+  background-image: initial !important;
+  background-position-x: initial !important;
+  background-position-y: initial !important;
+  background-size: initial !important;
+  background-repeat: initial !important;
+  background-attachment: initial !important;
+  background-origin: initial !important;
+  background-clip: initial !important;
+  background-color: rgb(223, 86, 64) !important;
+
+  border-radius: 25px !important;
+
+}
+
+.button-effect:hover {
+  background: #df5640 !important;
+}
+
+
+
+.fc-today-button.fc-button,
+.button-effect {
+  border-color: var(--global-palette-btn-bg-hover, #1768ea) !important;
+  border-top-color: rgb(223, 86, 6) !important;
+  border-right-color: rgb(223, 86, 64) !important;
+  border-bottom-color: rgb(223, 86, 64) !important;
+  border-left-color: rgb(223, 86, 64) !important;
+  color: var(--global-palette-btn-hover, #ffffff) !important;
+  background: var(--global-palette-btn-bg-hover, #1768ea) !important;
+
+  background-image: initial !important;
+  background-position-x: initial !important;
+  background-position-y: initial !important;
+  background-size: initial !important;
+  background-repeat: initial !important;
+  background-attachment: initial !important;
+  background-origin: initial !important;
+  background-clip: initial !important;
+  background-color: rgb(223, 86, 64) !important;
+
+  border-radius: 25px !important;
+
+}
+
+.fc-prev-button {
+  border: none !important;
+  color: var(--global-palette-btn-hover, #ffffff) !important;
+  background-color: var(--global-palette-btn-bg) !important;
+  border-radius: 15px 0 0 15px !important;
+
+}
+
+.fc-next-button {
+
+  border: none !important;
+  color: var(--global-palette-btn-hover, #ffffff) !important;
+  background-color: var(--global-palette-btn-bg) !important;
+  border-radius: 0 15px 15px 0 !important;
+
+}
+
+.fc-today-button.fc-button:hover,
+.button-effect:hover,
+.fc-next-button:hover,
+.fc-prev-button:hover {
+  background: #df5640 !important;
 }
