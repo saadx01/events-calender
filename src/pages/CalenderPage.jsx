@@ -7,6 +7,9 @@ import Modal from 'react-modal';
 import TopButtons from '../components/TopButtons';
 import './CalendarPage.css';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 Modal.setAppElement('#root');
 
@@ -95,7 +98,7 @@ export default function CalendarPage() {
 const handleSaveNote = async () => {
   setIsSaving(true);
   try {
-    // await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const result = await saveNoteToBackend(selectedDate, modalNote, noteIdsMap[selectedDate]);
 
     setUserNotes(prev => ({
@@ -120,8 +123,11 @@ const handleSaveNote = async () => {
     }
 
     setIsModalOpen(false);
+    toast.success('Note saved successfully!');
+    
   } catch (error) {
     console.error('Error saving user note:', error);
+    toast.error('Failed to save the note. Please try again.');
   } finally {
     setIsSaving(false);
   }
@@ -261,6 +267,7 @@ const handleSaveNote = async () => {
         </div>
 
       </Modal>
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
     </div>
   );
 }
