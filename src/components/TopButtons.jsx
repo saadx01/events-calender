@@ -39,9 +39,9 @@ export default function TopButtons({ onThemeSelected }) {
 
   return (
     <div className="top-bar">
-      <button className='button-effect' onClick={handleThemeClick}>Change<br />Background</button>
-      <button className='button-effect'>Filter<br />Activities</button>
-      <button className='button-effect'>Download<br />Calendar</button>
+      <button className='button-effect' onClick={handleThemeClick}>Change Background</button>
+      <button className='button-effect'>Filter Activities</button>
+      <button className='button-effect'>Download Calendar</button>
 
       <input
         type="file"

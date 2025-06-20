@@ -75,10 +75,10 @@ export default function CalendarPage() {
         setUserNotes(notesMap);
         setNoteIdsMap(idsMap);
 
-      // Extract and set calendar background image
-      if (res.data.calendar_bg) {
-        setBackgroundImage(res.data.calendar_bg);
-      }
+        // Extract and set calendar background image
+        if (res.data.calendar_bg) {
+          setBackgroundImage(res.data.calendar_bg);
+        }
 
       } catch (error) {
         console.error('Error fetching calendar data:', error);
@@ -91,22 +91,34 @@ export default function CalendarPage() {
   const handleDateClick = (arg) => {
     const dateStr = arg.dateStr;
     setSelectedDate(dateStr);
-    setModalNote(userNotes[dateStr] || '');
+    setModalNote(userNotes?.[dateStr] || '');
     setIsModalOpen(true);
   };
 
 const handleSaveNote = async () => {
   setIsSaving(true);
+
+  const hasExistingNote = Boolean(noteIdsMap[selectedDate]);
+  const trimmedNote = modalNote.trim();
+  const isNoteEmpty = trimmedNote === '';
+
+  const isNewNote = !hasExistingNote && !isNoteEmpty;
+  const isUpdated = hasExistingNote && !isNoteEmpty;
+  const isDeleted = hasExistingNote && isNoteEmpty;
+
+  console.log('isNewNote:', isNewNote);
+  console.log('isUpdated:', isUpdated);
+  console.log('isDeleted:', isDeleted);
+
   try {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    const result = await saveNoteToBackend(selectedDate, modalNote, noteIdsMap[selectedDate]);
+    const result = await saveNoteToBackend(selectedDate, trimmedNote, noteIdsMap[selectedDate]);
 
     setUserNotes(prev => ({
       ...prev,
-      [selectedDate]: modalNote
+      [selectedDate]: trimmedNote
     }));
 
-    if (modalNote.trim() === '') {
+    if (isDeleted) {
       const updatedMap = { ...userNotes };
       delete updatedMap[selectedDate];
       setUserNotes(updatedMap);
@@ -115,16 +127,23 @@ const handleSaveNote = async () => {
         delete copy[selectedDate];
         return copy;
       });
-    } else if (result?.id) {
-      setNoteIdsMap(prev => ({
-        ...prev,
-        [selectedDate]: result.id
-      }));
+      console.log('Note deleted:', selectedDate);
+      toast.success('Note deleted successfully!');
+    } else if (isNewNote) {
+      if (result?.id) {
+        setNoteIdsMap(prev => ({
+          ...prev,
+          [selectedDate]: result.id
+        }));
+      }
+      console.log('Note added:', selectedDate);
+      toast.success('Note added successfully!');
+    } else if (isUpdated) {
+      console.log('Note updated:', selectedDate);
+      toast.success('Note updated successfully!');
     }
 
     setIsModalOpen(false);
-    toast.success('Note saved successfully!');
-    
   } catch (error) {
     console.error('Error saving user note:', error);
     toast.error('Failed to save the note. Please try again.');
@@ -136,7 +155,7 @@ const handleSaveNote = async () => {
 
   const saveNoteToBackend = async (date, value, noteId = null) => {
     if (!window.ar_event_calendar_data) {
-      console.warn("ar_event_calendar_data not available");
+      console.warn("ar_event_calendar_data not available. Unable to save note to backend.");
       return;
     }
 
@@ -167,6 +186,7 @@ const handleSaveNote = async () => {
       status: "publish"
     });
 
+    // Update & Delete (If noteId exists, it will update; if value is empty, it will delete)
     const url = noteId
       ? `${root_url}/wp-json/wp/v2/member-events/${noteId}`
       : `${root_url}/wp-json/wp/v2/member-events/`;

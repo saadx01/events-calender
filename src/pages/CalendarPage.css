@@ -344,6 +344,7 @@ a.fc-daygrid-day-number {
   background-color: rgb(223, 86, 64) !important;
 
   border-radius: 25px !important;
+  font-family: 'Lilita One', var(--global-display-fallback-font) !important;
 
 }
 
