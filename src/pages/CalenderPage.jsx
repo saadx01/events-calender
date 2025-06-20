@@ -238,7 +238,7 @@ const handleSaveNote = async () => {
 
   return (
     <div className="app-wrapper">
-      <TopButtons setBackgroundImage={(url) => setBackgroundImage(url)} />
+      <TopButtons setBackgroundImage={(url) => setBackgroundImage(url)} userNotes={userNotes} />
       <div className="calendar-wrapper">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

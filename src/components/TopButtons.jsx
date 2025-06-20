@@ -1,10 +1,12 @@
 // TopButtons.jsx
 import React, { useRef } from 'react';
+import { saveAs } from 'file-saver';
 
-export default function TopButtons({ onThemeSelected }) {
+export default function TopButtons({ setBackgroundImage, userNotes }) {
   const fileInputRef = useRef();
 
-  const handleThemeClick = () => {
+  // --- HANDLE BACKGROUND IMAGE CHANGE ---
+  const handleChangeBgClick = () => {
     fileInputRef.current.click();
   };
 
@@ -30,18 +32,71 @@ export default function TopButtons({ onThemeSelected }) {
 
       const data = await res.json();
       if (data?.path) {
-        setBackgroundImage(data.path); // send to CalendarPage
+        setBackgroundImage(data.path); // inform CalendarPage
       }
     } catch (err) {
       console.error("Theme upload failed:", err);
     }
   };
 
+  // --- HANDLE CALENDAR DOWNLOAD ---
+  const handleDownloadClick = async () => {
+    if (!window.ar_event_calendar_data) {
+      console.warn("ar_event_calendar_data not available");
+      return;
+    }
+
+    const { root_url } = window.ar_event_calendar_data;
+
+    const now = new Date();
+    const month = now.toLocaleString('default', { month: 'long' });
+    const year = now.getFullYear();
+
+    // Build data payload
+    const calendarData = {
+      month,
+      year,
+    };
+
+    for (let i = 0; i < 43; i++) {
+      calendarData[`day${i + 1}`] = '';
+      calendarData[`icon${i}`] = '';
+      calendarData[`event${i}`] = '';
+    }
+
+    Object.entries(userNotes || {}).forEach(([dateStr, note]) => {
+      const date = new Date(dateStr);
+      const day = date.getDate();
+      if (day >= 1 && day <= 31) {
+        const index = day - 1;
+        calendarData[`day${index + 1}`] = day;
+        calendarData[`event${index}`] = note;
+      }
+    });
+
+    try {
+      const res = await fetch(`${root_url}/wp-json/document_generator/v1/generatepdf`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(calendarData)
+      });
+
+      if (!res.ok) throw new Error("PDF generation failed");
+
+      const blob = await res.blob();
+      saveAs(blob, 'calendar.pdf');
+    } catch (err) {
+      console.error("Download failed:", err);
+    }
+  };
+
   return (
     <div className="top-bar">
-      <button className='button-effect' onClick={handleThemeClick}>Change Background</button>
+      <button className='button-effect' onClick={handleChangeBgClick}>Change Background</button>
       <button className='button-effect'>Filter Activities</button>
-      <button className='button-effect'>Download Calendar</button>
+      <button className='button-effect' onClick={handleDownloadClick}>Download Calendar</button>
 
       <input
         type="file"
@@ -53,6 +108,7 @@ export default function TopButtons({ onThemeSelected }) {
     </div>
   );
 }
+
 
 
 
