@@ -42,7 +42,7 @@ export default function TopButtons({ setBackgroundImage, userNotes }) {
   // --- HANDLE CALENDAR DOWNLOAD ---
   const handleDownloadClick = async () => {
     if (!window.ar_event_calendar_data) {
-      console.warn("ar_event_calendar_data not available");
+      console.warn("ar_event_calendar_data not available. Not able to download calender.");
       return;
     }
 
@@ -83,13 +83,26 @@ export default function TopButtons({ setBackgroundImage, userNotes }) {
         body: JSON.stringify(calendarData)
       });
 
-      if (!res.ok) throw new Error("PDF generation failed");
+      if (!res.ok) {
+        let errorMsg = `HTTP ${res.status}`;
+        try {
+          const errorData = await res.json();
+          errorMsg = errorData.message || JSON.stringify(errorData);
+        } catch (jsonErr) {
+          // Response might not be JSON
+          const text = await res.text();
+          errorMsg = text || errorMsg;
+        }
+        throw new Error(`PDF generation failed: ${errorMsg}`);
+      }
 
       const blob = await res.blob();
       saveAs(blob, 'calendar.pdf');
+      console.log("Download successful: calendar.pdf");
     } catch (err) {
-      console.error("Download failed:", err);
+      console.error("Download failed:", err.message);
     }
+
   };
 
   return (
