@@ -108,8 +108,8 @@
 /* WEEK ROW BACKGROUND */
 .fc-col-header-cell {
   /* background-color: rgba(0, 0, 0, 0.5); */
-  background-color: var(--global-palette8);
-  /* color available only in wordpress theme */
+  /* background-color: var(--global-palette8); */     /* color available only in wordpress theme */
+  background-color: rgb(155, 81, 224);
   color: white;
   padding: 10px;
   height: 60px !important;
@@ -149,16 +149,12 @@
   background-color: white;
   z-index: 10;
   margin-bottom: 4px;
-  white-space: pre-wrap;
-  /* Allow text to wrap */
-  overflow: visible;
-  /* Let content show outside if necessary */
-  text-overflow: unset;
-  /* No ellipsis */
+  white-space: pre-wrap;    /* Allow text to wrap */
+  /* overflow: visible; */    /* Let content show outside if necessary */
+  text-overflow: unset;   /* No ellipsis */
   word-wrap: break-word;
-  max-height: 60px;
-  /* Optional: control height */
-  overflow-y: auto;
+  /* max-height: 60px; */   /* Optional: control height */
+  /* overflow-y: auto; */
 }
 
 

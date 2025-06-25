@@ -51,6 +51,7 @@ export default function TopButtons({ setBackgroundImage, userNotes }) {
     const now = new Date();
     const month = now.toLocaleString('default', { month: 'long' });
     const year = now.getFullYear();
+    const fileName = `calendar-${month}-${year}.pdf`;
 
     // Build data payload
     const calendarData = {
@@ -96,8 +97,13 @@ export default function TopButtons({ setBackgroundImage, userNotes }) {
         throw new Error(`PDF generation failed: ${errorMsg}`);
       }
 
-      const blob = await res.blob();
-      saveAs(blob, 'calendar.pdf');
+      // const blob = await res.blob();
+      // saveAs(blob, 'calendar.pdf');
+      console.log(res.headers.get("content-type")); // should be 'application/pdf'
+      const rawBlob = await res.blob();
+      const pdfBlob = new Blob([rawBlob], { type: 'application/pdf' });
+      saveAs(pdfBlob, fileName);
+
       console.log("Download successful: calendar.pdf");
     } catch (err) {
       console.error("Download failed:", err.message);
