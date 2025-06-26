@@ -1,1 +1,1 @@
-console.log("custom_js loaded successfully");
+console.log("custom_js.js loaded successfully");

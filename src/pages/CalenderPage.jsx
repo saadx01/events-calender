@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef  } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -22,6 +22,7 @@ export default function CalendarPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  const calendarRef = useRef(null);
 
 
 
@@ -238,7 +239,13 @@ const handleSaveNote = async () => {
 
   return (
     <div className="app-wrapper">
-      <TopButtons setBackgroundImage={(url) => setBackgroundImage(url)} userNotes={userNotes} />
+      <TopButtons 
+        setBackgroundImage={(url) => setBackgroundImage(url)} 
+        userNotes={userNotes} 
+        backgroundImage={backgroundImage} 
+        calendarRef={calendarRef}
+        events={events}
+        />
       <div className="calendar-wrapper">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -252,6 +259,7 @@ const handleSaveNote = async () => {
             end: 'today prev,next'
           }}
           dateClick={handleDateClick}
+          ref={calendarRef}
         />
       </div>
 

@@ -2,7 +2,18 @@
 import React, { useRef } from 'react';
 import { saveAs } from 'file-saver';
 
-export default function TopButtons({ setBackgroundImage, userNotes }) {
+export default function TopButtons({ setBackgroundImage, userNotes, backgroundImage, calendarRef, events  }) {
+
+//   const events= [
+//   { title: "World Health Day", start: "2025-05-05" },
+//   { title: "Mothers's Day (UK, USA, Canada)", start: "2025-05-15" },
+//   { title: "World War I Anniversary", start: "2025-05-15" },
+//   { title: "End of Term Dinner", start: "2025-05-29" },
+//   { title: "World Environment Day", start: "2025-06-05" },
+//   { title: "Father's Day (UK, USA, Canada)", start: "2025-06-15" },
+//   { title: "World War II Anniversary", start: "2025-06-15" },
+//   { title: "End of Term Party", start: "2025-06-25" }
+// ]
   const fileInputRef = useRef();
 
   // --- HANDLE BACKGROUND IMAGE CHANGE ---
@@ -39,77 +50,127 @@ export default function TopButtons({ setBackgroundImage, userNotes }) {
     }
   };
 
-  // --- HANDLE CALENDAR DOWNLOAD ---
-  const handleDownloadClick = async () => {
-    if (!window.ar_event_calendar_data) {
-      console.warn("ar_event_calendar_data not available. Not able to download calender.");
-      return;
+// --- HANDLE CALENDAR DOWNLOAD ---
+const handleDownloadClick = async () => {
+  if (!window.ar_event_calendar_data) {
+    console.warn("ar_event_calendar_data not available. Not able to download calendar.");
+    return;
+  }
+  const { root_url } = window.ar_event_calendar_data;
+
+  // const now = new Date();
+  // const month = now.toLocaleString('default', { month: 'long' });
+  // const year = now.getFullYear();
+
+  const calendarApi = calendarRef.current?.getApi();
+  const viewStartDate = new Date(calendarApi?.view?.currentStart);
+
+  const month = viewStartDate.toLocaleString('default', { month: 'long' });
+  const year = viewStartDate.getFullYear();
+
+  const fileName = `calendar-${month}-${year}.pdf`;
+
+  // Prepare data payload
+  const calendarData = {
+    month,
+    year,
+  };
+
+  // Initialize all required fields
+  for (let i = 0; i < 43; i++) {
+    if (i !== 42) {
+      calendarData[`day${i + 1}`] = '';   // 1-42
     }
+    calendarData[`icon${i}`] = '';        // 0-42
+    calendarData[`event${i}`] = '';       // 0-42
+  }
 
-    const { root_url } = window.ar_event_calendar_data;
+  // --- Set all `dayX` fields correctly ---
+  const firstDayOfMonth = new Date(year, viewStartDate.getMonth(), 1);
+  const lastDayOfMonth = new Date(year, viewStartDate.getMonth() + 1, 0);
+  const startIndex = firstDayOfMonth.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
 
-    const now = new Date();
-    const month = now.toLocaleString('default', { month: 'long' });
-    const year = now.getFullYear();
-    const fileName = `calendar-${month}-${year}.pdf`;
+  let day = 1;
+  for (let i = startIndex; day <= lastDayOfMonth.getDate(); i++) {
+    calendarData[`day${i + 1}`] = day;
+    day++;
+  }
 
-    // Build data payload
-    const calendarData = {
-      month,
-      year,
-    };
+  // Fill dynamic notes and events into the correct `eventX` index
+  const eventMap = {};
+  (events || []).forEach(ev => {
+    const dateStr = new Date(ev.start).toISOString().split("T")[0];
+    if (!eventMap[dateStr]) eventMap[dateStr] = [];
+    eventMap[dateStr].push(ev.title);
+  });
 
-    for (let i = 0; i < 43; i++) {
-      calendarData[`day${i + 1}`] = '';
-      calendarData[`icon${i}`] = '';
-      calendarData[`event${i}`] = '';
-    }
-
-    Object.entries(userNotes || {}).forEach(([dateStr, note]) => {
-      const date = new Date(dateStr);
-      const day = date.getDate();
-      if (day >= 1 && day <= 31) {
-        const index = day - 1;
-        calendarData[`day${index + 1}`] = day;
-        calendarData[`event${index}`] = note;
+  Object.entries(userNotes || {}).forEach(([dateStr, note]) => {
+    const date = new Date(dateStr);
+    const noteDay = date.getDate();
+    const noteMonth = date.getMonth();
+    const currentMonth = viewStartDate.getMonth();
+    if (noteMonth === currentMonth) {
+      const offset = firstDayOfMonth.getDay(); // 0–6
+      const index = noteDay + offset - 1;
+      if (index >= 0 && index < 43) {
+        if (!eventMap[dateStr]) eventMap[dateStr] = [];
+        eventMap[dateStr].push(note);
       }
+    }
+  });
+
+  // Assign merged values to `eventX` fields
+  for (let i = 1; i <= 42; i++) {
+    const dayValue = calendarData[`day${i}`];
+    if (!dayValue) continue;
+
+    const date = new Date(year, viewStartDate.getMonth(), dayValue);
+    const dateStr = date.toISOString().split("T")[0];
+
+    const combinedEvents = eventMap[dateStr];
+    if (combinedEvents && combinedEvents.length > 0) {
+      calendarData[`event${i - 1}`] = combinedEvents.join('\n');
+    }
+  }
+
+  // Add required extra fields
+  calendarData.bg_image = backgroundImage;
+  calendarData.date = new Date(year, viewStartDate.getMonth() + 1, 0).toISOString().split('T')[0];
+
+  console.log("Calendar data prepared for download:", calendarData);
+
+  try {
+    const res = await fetch(`${root_url}/wp-json/document_generator/v1/generatepdf`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(calendarData)
     });
 
-    try {
-      const res = await fetch(`${root_url}/wp-json/document_generator/v1/generatepdf`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(calendarData)
-      });
-
-      if (!res.ok) {
-        let errorMsg = `HTTP ${res.status}`;
-        try {
-          const errorData = await res.json();
-          errorMsg = errorData.message || JSON.stringify(errorData);
-        } catch (jsonErr) {
-          // Response might not be JSON
-          const text = await res.text();
-          errorMsg = text || errorMsg;
-        }
-        throw new Error(`PDF generation failed: ${errorMsg}`);
+    if (!res.ok) {
+      let errorMsg = `HTTP ${res.status}`;
+      try {
+        const errorData = await res.json();
+        errorMsg = errorData.message || JSON.stringify(errorData);
+      } catch (jsonErr) {
+        const text = await res.text();
+        errorMsg = text || errorMsg;
       }
-
-      // const blob = await res.blob();
-      // saveAs(blob, 'calendar.pdf');
-      console.log(res.headers.get("content-type")); // should be 'application/pdf'
-      const rawBlob = await res.blob();
-      const pdfBlob = new Blob([rawBlob], { type: 'application/pdf' });
-      saveAs(pdfBlob, fileName);
-
-      console.log("Download successful: calendar.pdf");
-    } catch (err) {
-      console.error("Download failed:", err.message);
+      throw new Error(`PDF generation failed: ${errorMsg}`);
     }
 
-  };
+    const rawBlob = await res.blob();
+    const pdfBlob = new Blob([rawBlob], { type: 'application/pdf' });
+    saveAs(pdfBlob, fileName);
+    console.log(`Download successful: ${fileName}`);
+  } catch (err) {
+    console.error("Download failed:", err.message);
+  }
+};
+
+
+
 
   return (
     <div className="top-bar">
