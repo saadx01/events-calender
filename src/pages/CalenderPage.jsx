@@ -5,6 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import Modal from 'react-modal';
 import TopButtons from '../components/TopButtons';
+import DownloadButtons from '../components/DownloadButtons';
 import './CalendarPage.css';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -241,10 +242,6 @@ const handleSaveNote = async () => {
     <div className="app-wrapper">
       <TopButtons 
         setBackgroundImage={(url) => setBackgroundImage(url)} 
-        userNotes={userNotes} 
-        backgroundImage={backgroundImage} 
-        calendarRef={calendarRef}
-        events={events}
         />
       <div className="calendar-wrapper">
         <FullCalendar
@@ -262,6 +259,12 @@ const handleSaveNote = async () => {
           ref={calendarRef}
         />
       </div>
+
+      <DownloadButtons
+        userNotes={userNotes} 
+        backgroundImage={backgroundImage} 
+        calendarRef={calendarRef}
+        events={events}/>
 
       <Modal
         isOpen={isModalOpen}
