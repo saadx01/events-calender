@@ -1,10 +1,10 @@
 // components/DownloadButtons.jsx
 import { saveAs } from 'file-saver';
 
-export default function DownloadButtons({ userNotes, backgroundImage, calendarRef, events }) {
+export default function DownloadButtons({ userNotes, backgroundImage, calendarRef, allEvents }) {
 
 
-    function prepareCalendarData(calendarApi, events, userNotes, backgroundImage) {
+    function prepareCalendarData(calendarApi, allEvents, userNotes, backgroundImage) {
         const viewStartDate = new Date(calendarApi?.view?.currentStart);
 
         const month = viewStartDate.toLocaleString('default', { month: 'long' });
@@ -37,7 +37,7 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
 
         // Fill dynamic notes and events into the correct `eventX` index
         const eventMap = {};
-        (events || []).forEach(ev => {
+        (allEvents || []).forEach(ev => {
             const dateStr = new Date(ev.start).toISOString().split("T")[0];
             if (!eventMap[dateStr]) eventMap[dateStr] = [];
             eventMap[dateStr].push(ev.title);
@@ -89,7 +89,7 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
         const calendarApi = calendarRef.current?.getApi();
         const { calendarData, month, year } = prepareCalendarData(
             calendarApi,
-            events,
+            allEvents,
             userNotes,
             backgroundImage
         );
@@ -138,7 +138,7 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
         const calendarApi = calendarRef.current?.getApi();
         const { calendarData, month, year } = prepareCalendarData(
             calendarApi,
-            events,
+            allEvents,
             userNotes,
             backgroundImage
         );

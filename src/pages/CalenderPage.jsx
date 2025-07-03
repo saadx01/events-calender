@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 Modal.setAppElement('#root');
 
 export default function CalendarPage() {
-  const [events, setEvents] = useState([]);
+  const [allEvents, setAllEvents] = useState([]);
   const [userNotes, setUserNotes] = useState({});
   const [noteIdsMap, setNoteIdsMap] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
@@ -24,6 +24,12 @@ export default function CalendarPage() {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const calendarRef = useRef(null);
+
+  const [activities, setActivities] = useState([]);
+  const [calendarCustomEvents, setCalendarCustomEvents] = useState([]);
+  const [visibleFilters, setVisibleFilters] = useState({ monthly: true });
+  const [visibleEvents, setVisibleEvents] = useState([]); // This will be the array you pass to FullCalendar
+
 
 
 
@@ -35,6 +41,159 @@ export default function CalendarPage() {
           withCredentials: true
         });
 
+      // const res = {
+      //   data: {
+      //     activities: [
+      //       {
+      //         id: 524,
+      //         name: "Australia Day",
+      //         link: "https://newstaging.memorylanetherapy.com/calendar-for-aged-care/january/australia-day/",
+      //         date: "20230926",
+      //         color: "#6E5AE2",
+      //         hover_color: "#6E5AE2"
+      //       },
+      //       {
+      //         id: 534,
+      //         name: "Betty White's birthday",
+      //         link: "https://newstaging.memorylanetherapy.com/calendar-for-aged-care/january/betty-whites-birthday/",
+      //         date: "20230117",
+      //         color: "#6E5AE2",
+      //         hover_color: "#6E5AE2"
+      //       },
+      //       {
+      //         id: 522,
+      //         name: "Elvis Presley's Birthday",
+      //         link: "https://newstaging.memorylanetherapy.com/calendar-for-aged-care/january/elvis-presleys-birthday/",
+      //         date: "20230918",
+      //         color: "#6E5AE2",
+      //         hover_color: "#6E5AE2"
+      //       },
+      //       {
+      //         id: 601,
+      //         name: "World Chocolate Day",
+      //         link: "https://newstaging.memorylanetherapy.com/calendar/july/world-chocolate-day/",
+      //         date: "20250707", // 🔥 Current July
+      //         color: "#6E5AE2",
+      //         hover_color: "#6E5AE2"
+      //       },
+      //       {
+      //         id: 602,
+      //         name: "Picnic Day",
+      //         link: "https://newstaging.memorylanetherapy.com/calendar/july/picnic-day/",
+      //         date: "20250710", // 🔥 Current July
+      //         color: "#6E5AE2",
+      //         hover_color: "#6E5AE2"
+      //       }
+      //     ],
+      //     calendar_custom_events: [
+      //       {
+      //         id: 24471,
+      //         title: "Pakistan’s Independence Day",
+      //         author: "Up Work",
+      //         date: "2023/07/14",
+      //         type: "calendar-events",
+      //         category: "reminders",
+      //         color: "#7bb591"
+      //       },
+      //       {
+      //         id: 24472,
+      //         title: "Team Outing",
+      //         author: "Admin",
+      //         date: "2025/07/15", // 🔥 Current July
+      //         type: "calendar-events",
+      //         category: "celebration",
+      //         color: "#FF9800"
+      //       },
+      //       {
+      //         id: 24473,
+      //         title: "Music Therapy Session",
+      //         author: "Admin",
+      //         date: "2025/07/20", // 🔥 Current July
+      //         type: "calendar-events",
+      //         category: "reminders",
+      //         color: "#7bb591"
+      //       }
+      //     ],
+      //     member_events: [
+      //       {
+      //         id: 36250,
+      //         title: "Auto Draft",
+      //         author: "Up Work",
+      //         date: null,
+      //         type: "member-events",
+      //         color: "#FF7276"
+      //       },
+      //       {
+      //         id: 36249,
+      //         title: "Auto Draft",
+      //         author: "Up Work",
+      //         date: null,
+      //         type: "member-events",
+      //         color: "#FF7276"
+      //       },
+      //       {
+      //         id: 36091,
+      //         title: "how",
+      //         author: "Up Work",
+      //         date: "2025/05/06",
+      //         type: "member-events",
+      //         color: "#FF7276"
+      //       },
+      //       {
+      //         id: 36090,
+      //         title: "Daily Journal",
+      //         author: "Up Work",
+      //         date: "2025/07/03", // 🔥 Current July
+      //         type: "member-events",
+      //         color: "#FF7276"
+      //       },
+      //       {
+      //         id: 36089,
+      //         title: "Reminder: Call Family",
+      //         author: "Up Work",
+      //         date: "2025/07/05", // 🔥 Current July
+      //         type: "member-events",
+      //         color: "#FF7276"
+      //       },
+      //       {
+      //         id: 36088,
+      //         title: "Write Poem",
+      //         author: "Up Work",
+      //         date: "2025/07/10", // 🔥 Current July
+      //         type: "member-events",
+      //         color: "#FF7276"
+      //       }
+      //     ],
+      //     calendar_default_icon_url: "https://newstaging.memorylanetherapy.com/downloads/uploads/woocommerce-placeholder.png",
+      //     calendar_icons: [
+      //       {
+      //         id: 36092,
+      //         author: "Up Work",
+      //         date: "2025/05/01",
+      //         type: "calendar-icon",
+      //         link: ""
+      //       },
+      //       {
+      //         id: 28473,
+      //         author: "Up Work",
+      //         date: "2024/03/06",
+      //         type: "calendar-icon",
+      //         link: "https://newstaging.memorylanetherapy.com/wp-content/Event-calendar-uploads/Elegant-QA-Live-Session-Instagram-Post-17.png"
+      //       },
+      //       {
+      //         id: 28471,
+      //         author: "Up Work",
+      //         date: "2024/03/07",
+      //         type: "calendar-icon",
+      //         link: "https://newstaging.memorylanetherapy.com/wp-content/Event-calendar-uploads/Default-Calendar-Background-2.jpg"
+      //       }
+      //     ],
+      //     calendar_bg: "https://newstaging.memorylanetherapy.com/wp-content/uploads/2023/11/Default-Calendar-Background.jpg"
+      //   }
+      // };
+
+
+
         const formatDate = (str) => {
           if (!str) return null;
           return str.includes('/')
@@ -42,12 +201,17 @@ export default function CalendarPage() {
             : `${str.slice(0, 4)}-${str.slice(4, 6)}-${str.slice(6, 8)}`;
         };
 
-        const allEvents = [];
+        // const allEvents = [];
+        const fetchedActivities = [];
+        const fetchedCalendarCustomEvents = [];
+
         const notesMap = {};
         const idsMap = {};
 
+        console.log('Fetched calendar data:', res.data);
+
         res.data.activities?.forEach(ev => {
-          allEvents.push({
+          fetchedActivities.push({
             title: ev.name,
             start: formatDate(ev.date),
             url: ev.link,
@@ -57,7 +221,7 @@ export default function CalendarPage() {
         });
 
         res.data.calendar_custom_events?.forEach(ev => {
-          allEvents.push({
+          fetchedCalendarCustomEvents.push({
             title: ev.title,
             start: formatDate(ev.date),
             color: ev.color || '#7bb591',
@@ -73,7 +237,20 @@ export default function CalendarPage() {
           }
         });
 
-        setEvents(allEvents);
+        console.log("Fetched activities and custom events:",fetchedActivities,fetchedCalendarCustomEvents)
+        setActivities(fetchedActivities);
+        setCalendarCustomEvents(fetchedCalendarCustomEvents);
+        setAllEvents([...fetchedActivities, ...fetchedCalendarCustomEvents]);
+
+        // Build default visible filters dynamically
+        const initialFilters = { monthly: true };
+        fetchedCalendarCustomEvents.forEach(ev => {
+          if (ev.category) {
+            initialFilters[ev.category] = true;
+          }
+        });
+        setVisibleFilters(initialFilters);
+
         setUserNotes(notesMap);
         setNoteIdsMap(idsMap);
 
@@ -241,13 +418,18 @@ const handleSaveNote = async () => {
   return (
     <div className="app-wrapper">
       <TopButtons 
-        setBackgroundImage={(url) => setBackgroundImage(url)} 
+        setBackgroundImage={(url) => setBackgroundImage(url)}
+        activities={activities}
+        calendarCustomEvents={calendarCustomEvents}
+        visibleFilters={visibleFilters}
+        setVisibleFilters={setVisibleFilters}
+        setVisibleEvents={setVisibleEvents}
         />
       <div className="calendar-wrapper">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
-          events={events}
+          events={visibleEvents}
           eventContent={renderEventContent}
           dayCellContent={renderDayCellContent}
           headerToolbar={{
@@ -264,7 +446,7 @@ const handleSaveNote = async () => {
         userNotes={userNotes} 
         backgroundImage={backgroundImage} 
         calendarRef={calendarRef}
-        events={events}/>
+        allEvents={allEvents}/>
 
       <Modal
         isOpen={isModalOpen}

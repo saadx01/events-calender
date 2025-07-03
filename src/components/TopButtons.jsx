@@ -1,12 +1,23 @@
 // TopButtons.jsx
-import React, { useRef } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 
-export default function TopButtons({ setBackgroundImage  }) {
-
+export default function TopButtons({
+  setBackgroundImage,
+  activities,
+  calendarCustomEvents,
+  visibleFilters,
+  setVisibleFilters,
+  setVisibleEvents,
+}) {
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const fileInputRef = useRef();
+  const dropdownRef = useRef();
 
-  // --- HANDLE BACKGROUND IMAGE CHANGE ---
+  const uniqueCategories = Array.from(
+    new Set(calendarCustomEvents.map((e) => e.category))
+  );
+
   const handleChangeBgClick = () => {
     fileInputRef.current.click();
   };
@@ -25,7 +36,7 @@ export default function TopButtons({ setBackgroundImage  }) {
         `${ar_event_calendar_data.root_url}/wp-json/activities/v1/upload-bg`,
         {
           method: "POST",
-          body: formData
+          body: formData,
         }
       );
 
@@ -33,19 +44,100 @@ export default function TopButtons({ setBackgroundImage  }) {
 
       const data = await res.json();
       if (data?.path) {
-        setBackgroundImage(data.path); // inform CalendarPage
+        setBackgroundImage(data.path);
       }
     } catch (err) {
       console.error("Theme upload failed:", err);
     }
   };
 
+  const toggleDropdown = () => {
+    setShowDropdown((prev) => !prev);
+  };
 
+  const handleCheckboxChange = (key) => {
+    setVisibleFilters((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  useEffect(() => {
+    const filteredEvents = [];
+
+    if (visibleFilters.monthly) {
+      filteredEvents.push(...activities);
+    }
+
+    uniqueCategories.forEach((category) => {
+      if (visibleFilters[category]) {
+        const catEvents = calendarCustomEvents.filter(
+          (ev) => ev.category === category
+        );
+        filteredEvents.push(...catEvents);
+      }
+    });
+
+    setVisibleEvents(filteredEvents);
+  }, [visibleFilters, activities, calendarCustomEvents, setVisibleEvents]);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
 
   return (
     <div className="top-bar">
-      <button className='button-effect' onClick={handleChangeBgClick}>Change Background</button>
-      <button className='button-effect'>Filter Activities</button>
+      <button className="button-effect" onClick={handleChangeBgClick}>
+        Change Background
+      </button>
+
+      {/* <div className="filter-dropdown-wrapper" ref={dropdownRef}>
+        <button className="button-effect" onClick={toggleDropdown}>
+          Filter Activities
+        </button>
+
+        {showDropdown && (
+          <div className="filter-dropdown">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={visibleFilters.monthly || false}
+                onChange={() => handleCheckboxChange("monthly")}
+              />
+              Monthly Activities
+            </label>
+
+            {uniqueCategories.map((category) => (
+              <label className="checkbox-label" key={category}>
+                <input
+                  type="checkbox"
+                  checked={visibleFilters[category] || false}
+                  onChange={() => handleCheckboxChange(category)}
+                />
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </label>
+            ))}
+          </div>
+        )}
+      </div> */}
 
       <input
         type="file"
@@ -57,21 +149,3 @@ export default function TopButtons({ setBackgroundImage  }) {
     </div>
   );
 }
-
-
-
-
-
-
-// import React from 'react';
-// export default function TopButtons() {
-//   return (
-
-//     <div className="top-bar">
-//           <button>Theme</button>
-//           <button>Content</button>
-//           <button>Design</button>
-//           <button>Download</button>
-//     </div>
-//   );
-// }
