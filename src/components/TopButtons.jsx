@@ -8,8 +8,11 @@ export default function TopButtons({
   visibleFilters,
   setVisibleFilters,
   setVisibleEvents,
+  categoryColors,
 }) {
   const [showDropdown, setShowDropdown] = useState(false);
+
+  // console.log("categoryColors:", categoryColors);
 
   const fileInputRef = useRef();
   const dropdownRef = useRef();
@@ -109,35 +112,40 @@ export default function TopButtons({
         Change Background
       </button>
 
-      {/* <div className="filter-dropdown-wrapper" ref={dropdownRef}>
-        <button className="button-effect" onClick={toggleDropdown}>
-          Filter Activities
-        </button>
+<div className="filter-dropdown-wrapper" ref={dropdownRef}>
+  <button className="button-effect" onClick={toggleDropdown}>
+    Filter Activities
+  </button>
 
-        {showDropdown && (
-          <div className="filter-dropdown">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                checked={visibleFilters.monthly || false}
-                onChange={() => handleCheckboxChange("monthly")}
-              />
-              Monthly Activities
-            </label>
+  {showDropdown && (
+    <div className="filter-dropdown">
+      <label className="checkbox-label">
+        <input
+          type="checkbox"
+          checked={visibleFilters.monthly || false}
+          onChange={() => handleCheckboxChange("monthly")}
+        />
+        <span style={{ color: categoryColors?.monthly || "black" }}>
+          Monthly Activities
+        </span>
+      </label>
 
-            {uniqueCategories.map((category) => (
-              <label className="checkbox-label" key={category}>
-                <input
-                  type="checkbox"
-                  checked={visibleFilters[category] || false}
-                  onChange={() => handleCheckboxChange(category)}
-                />
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </label>
-            ))}
-          </div>
-        )}
-      </div> */}
+      {uniqueCategories.map((category) => (
+        <label className="checkbox-label" key={category}>
+          <input
+            type="checkbox"
+            checked={visibleFilters[category] || false}
+            onChange={() => handleCheckboxChange(category)}
+          />
+          <span style={{ color: categoryColors?.[category] || "black" }}>
+            {category.charAt(0).toUpperCase() + category.slice(1)}
+          </span>
+        </label>
+      ))}
+    </div>
+  )}
+</div>
+
 
       <input
         type="file"

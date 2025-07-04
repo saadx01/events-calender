@@ -1,83 +1,75 @@
 // components/DownloadButtons.jsx
 import { saveAs } from 'file-saver';
 
-export default function DownloadButtons({ userNotes, backgroundImage, calendarRef, allEvents }) {
+export default function DownloadButtons({ userNotes, backgroundImage, calendarRef, visibleEvents }) {
 
 
-    function prepareCalendarData(calendarApi, allEvents, userNotes, backgroundImage) {
-        const viewStartDate = new Date(calendarApi?.view?.currentStart);
+    function prepareCalendarData(calendarApi, visibleEvents, userNotes, backgroundImage) {
+    const viewStartDate = new Date(calendarApi?.view?.currentStart);
 
-        const month = viewStartDate.toLocaleString('default', { month: 'long' });
-        const year = viewStartDate.getFullYear();
+    const month = viewStartDate.toLocaleString('default', { month: 'long' });
+    const year = viewStartDate.getFullYear();
 
-        const calendarData = {
-            month,
-            year,
-        };
+    const calendarData = {
+        month,
+        year,
+    };
 
-        // Initialize all required fields
-        for (let i = 0; i < 43; i++) {
-            if (i !== 42) {
-                calendarData[`day${i + 1}`] = '';   // 1-42
-            }
-            calendarData[`icon${i}`] = '';        // 0-42
-            calendarData[`event${i}`] = '';       // 0-42
+    for (let i = 0; i < 43; i++) {
+        if (i !== 42) {
+        calendarData[`day${i + 1}`] = '';
         }
-
-        // --- Set all `dayX` fields correctly ---
-        const firstDayOfMonth = new Date(year, viewStartDate.getMonth(), 1);
-        const lastDayOfMonth = new Date(year, viewStartDate.getMonth() + 1, 0);
-        const startIndex = firstDayOfMonth.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-
-        let day = 1;
-        for (let i = startIndex; day <= lastDayOfMonth.getDate(); i++) {
-            calendarData[`day${i + 1}`] = day;
-            day++;
-        }
-
-        // Fill dynamic notes and events into the correct `eventX` index
-        const eventMap = {};
-        (allEvents || []).forEach(ev => {
-            const dateStr = new Date(ev.start).toISOString().split("T")[0];
-            if (!eventMap[dateStr]) eventMap[dateStr] = [];
-            eventMap[dateStr].push(ev.title);
-        });
-
-        Object.entries(userNotes || {}).forEach(([dateStr, note]) => {
-            const date = new Date(dateStr);
-            const noteDay = date.getDate();
-            const noteMonth = date.getMonth();
-            const currentMonth = viewStartDate.getMonth();
-            if (noteMonth === currentMonth) {
-                const offset = firstDayOfMonth.getDay(); // 0–6
-                const index = noteDay + offset - 1;
-                if (index >= 0 && index < 43) {
-                    if (!eventMap[dateStr]) eventMap[dateStr] = [];
-                    eventMap[dateStr].push(note);
-                }
-            }
-        });
-
-        // Assign merged values to `eventX` fields
-        for (let i = 1; i <= 42; i++) {
-            const dayValue = calendarData[`day${i}`];
-            if (!dayValue) continue;
-
-            const date = new Date(year, viewStartDate.getMonth(), dayValue);
-            const dateStr = date.toISOString().split("T")[0];
-
-            const combinedEvents = eventMap[dateStr];
-            if (combinedEvents && combinedEvents.length > 0) {
-                calendarData[`event${i - 1}`] = combinedEvents.join('\n');
-            }
-        }
-
-        // Add required extra fields
-        calendarData.bg_image = backgroundImage;
-        calendarData.date = new Date(year, viewStartDate.getMonth() + 1, 0).toISOString().split('T')[0];
-
-        return { calendarData, month, year };
+        calendarData[`icon${i}`] = '';
+        calendarData[`event${i}`] = '';
     }
+
+    const firstDayOfMonth = new Date(year, viewStartDate.getMonth(), 1);
+    const lastDayOfMonth = new Date(year, viewStartDate.getMonth() + 1, 0);
+    const startIndex = firstDayOfMonth.getDay();
+
+    let day = 1;
+    for (let i = startIndex; day <= lastDayOfMonth.getDate(); i++) {
+        calendarData[`day${i + 1}`] = day;
+        day++;
+    }
+
+    const eventMap = {};
+    (visibleEvents || []).forEach(ev => {
+        const dateStr = new Date(ev.start).toISOString().split("T")[0];
+        if (!eventMap[dateStr]) eventMap[dateStr] = [];
+        eventMap[dateStr].push(ev.title);
+    });
+
+    Object.entries(userNotes || {}).forEach(([dateStr, note]) => {
+        const date = new Date(dateStr);
+        const noteMonth = date.getMonth();
+        const currentMonth = viewStartDate.getMonth();
+        if (noteMonth === currentMonth) {
+        if (!eventMap[dateStr]) eventMap[dateStr] = [];
+        eventMap[dateStr].push(note);
+        }
+    });
+    // console.log("Event map:", eventMap);
+
+    for (let day = 1; day <= lastDayOfMonth.getDate()+1; day++) {
+        const index = startIndex + (day - 1);
+        const date = new Date(year, viewStartDate.getMonth(), day);
+        const dateStr = date.toISOString().split("T")[0];
+
+        const combinedEvents = eventMap[dateStr];
+        // console.log("Combined events for date:", dateStr, combinedEvents);
+        if (combinedEvents && combinedEvents.length > 0) {
+        // console.log(`Assigning to event${index + 1}:`, combinedEvents);
+        calendarData[`event${index}`] = combinedEvents.join('\n');
+        }
+    }
+
+    calendarData.bg_image = backgroundImage;
+    calendarData.date = new Date(year, viewStartDate.getMonth() + 1, 0).toISOString().split('T')[0];
+
+    return { calendarData, month, year };
+    }
+
 
     const handleDownloadPdfClick = async () => {
         if (!window.ar_event_calendar_data) {
@@ -89,14 +81,14 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
         const calendarApi = calendarRef.current?.getApi();
         const { calendarData, month, year } = prepareCalendarData(
             calendarApi,
-            allEvents,
+            visibleEvents,
             userNotes,
             backgroundImage
         );
 
         const fileName = `calendar-${month}-${year}.pdf`;
 
-        console.log("Calendar data prepared for download:", calendarData);
+        // console.log("Calendar data prepared for download:", calendarData);
 
         try {
             const res = await fetch(`${root_url}/wp-json/document_generator/v1/generatepdf`, {
@@ -122,7 +114,7 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
             const rawBlob = await res.blob();
             const pdfBlob = new Blob([rawBlob], { type: 'application/pdf' });
             saveAs(pdfBlob, fileName);
-            console.log(`Download successful: ${fileName}`);
+            // console.log(`Download successful: ${fileName}`);
         } catch (err) {
             console.error("Download failed:", err.message);
         }
@@ -138,14 +130,14 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
         const calendarApi = calendarRef.current?.getApi();
         const { calendarData, month, year } = prepareCalendarData(
             calendarApi,
-            allEvents,
+            visibleEvents,
             userNotes,
             backgroundImage
         );
 
         const fileName = `calendar-${month}-${year}.docx`;
 
-        console.log("Calendar data prepared for download:", calendarData);
+        // console.log("Calendar data prepared for download:", calendarData);
 
         try {
             const res = await fetch(`${root_url}/wp-json/document_generator/v1/generateword`, {
@@ -173,7 +165,7 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
                 type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             });
             saveAs(wordBlob, fileName);
-            console.log(`Download successful: ${fileName}`);
+            // console.log(`Download successful: ${fileName}`);
         } catch (err) {
             console.error("Download failed:", err.message);
         }
