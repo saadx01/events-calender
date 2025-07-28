@@ -1,4 +1,3 @@
-// TopButtons.jsx
 import React, { useState, useRef, useEffect } from "react";
 
 export default function TopButtons({
@@ -9,13 +8,15 @@ export default function TopButtons({
   setVisibleFilters,
   setVisibleEvents,
   categoryColors,
+  fontSize,
+  setFontSize, // ✅ Added prop for font size state
 }) {
   const [showDropdown, setShowDropdown] = useState(false);
-
-  // console.log("categoryColors:", categoryColors);
+  const [showFontSlider, setShowFontSlider] = useState(false); // ✅ State for font slider popover
 
   const fileInputRef = useRef();
   const dropdownRef = useRef();
+  const sliderRef = useRef();
 
   const uniqueCategories = Array.from(
     new Set(calendarCustomEvents.map((e) => e.category))
@@ -58,6 +59,10 @@ export default function TopButtons({
     setShowDropdown((prev) => !prev);
   };
 
+  const toggleFontSlider = () => {
+    setShowFontSlider((prev) => !prev);
+  };
+
   const handleCheckboxChange = (key) => {
     setVisibleFilters((prev) => ({
       ...prev,
@@ -88,14 +93,15 @@ export default function TopButtons({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
+        (dropdownRef.current && !dropdownRef.current.contains(event.target)) &&
+        (sliderRef.current && !sliderRef.current.contains(event.target))
       ) {
         setShowDropdown(false);
+        setShowFontSlider(false);
       }
     };
 
-    if (showDropdown) {
+    if (showDropdown || showFontSlider) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -104,48 +110,70 @@ export default function TopButtons({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showDropdown]);
+  }, [showDropdown, showFontSlider]);
 
   return (
     <div className="top-bar">
+      {/* 1. Change Background */}
       <button className="button-effect" onClick={handleChangeBgClick}>
         Change Background
       </button>
 
-<div className="filter-dropdown-wrapper" ref={dropdownRef}>
-  <button className="button-effect" onClick={toggleDropdown}>
-    Filter Activities
-  </button>
+      {/* 2. Filter Dropdown */}
+      <div className="filter-dropdown-wrapper" ref={dropdownRef}>
+        <button className="button-effect" onClick={toggleDropdown}>
+          Filter Activities
+        </button>
 
-  {showDropdown && (
-    <div className="filter-dropdown">
-      <label className="checkbox-label">
-        <input
-          type="checkbox"
-          checked={visibleFilters.monthly || false}
-          onChange={() => handleCheckboxChange("monthly")}
-        />
-        <span style={{ color: categoryColors?.monthly || "black" }}>
-          Monthly Activities
-        </span>
-      </label>
+        {showDropdown && (
+          <div className="filter-dropdown">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={visibleFilters.monthly || false}
+                onChange={() => handleCheckboxChange("monthly")}
+              />
+              <span style={{ color: categoryColors?.monthly || "black" }}>
+                Monthly Activities
+              </span>
+            </label>
 
-      {uniqueCategories.map((category) => (
-        <label className="checkbox-label" key={category}>
-          <input
-            type="checkbox"
-            checked={visibleFilters[category] || false}
-            onChange={() => handleCheckboxChange(category)}
-          />
-          <span style={{ color: categoryColors?.[category] || "black" }}>
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-          </span>
-        </label>
-      ))}
-    </div>
-  )}
-</div>
+            {uniqueCategories.map((category) => (
+              <label className="checkbox-label" key={category}>
+                <input
+                  type="checkbox"
+                  checked={visibleFilters[category] || false}
+                  onChange={() => handleCheckboxChange(category)}
+                />
+                <span style={{ color: categoryColors?.[category] || "black" }}>
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
 
+      {/* 3. Font Size Slider */}
+      <div className="font-slider-wrapper" ref={sliderRef}>
+        <button className="button-effect" onClick={toggleFontSlider}>
+          Font Size
+        </button>
+
+        {showFontSlider && (
+          <div className="font-slider-popover">
+            <p className="slider-label">Font Size: {fontSize}</p>
+            <input
+              type="range"
+              min="10"
+              max="30"
+              step="1"
+              value={fontSize}
+              onChange={(e) => setFontSize(parseInt(e.target.value))}
+            />
+          </div>
+        )}
+      </div>
 
       <input
         type="file"
