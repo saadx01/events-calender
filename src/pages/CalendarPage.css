@@ -522,6 +522,11 @@ a.fc-daygrid-day-number {
   z-index: 100;
 }
 
+.font-slider-popover input[type="range"] {
+  width: 100%;
+  -webkit-appearance: auto !important;
+}
+
 .slider-label {
   font-size: 16px;
   margin-bottom: 8px;

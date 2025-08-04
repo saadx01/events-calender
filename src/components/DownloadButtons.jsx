@@ -1,7 +1,10 @@
 // components/DownloadButtons.jsx
+import { useState, useRef } from 'react';
 import html2pdf from 'html2pdf.js';
 
 export default function DownloadButtons({ userNotes, backgroundImage, calendarRef, visibleEvents }) {
+  const [previewHTML, setPreviewHTML] = useState('');
+  const iframeRef = useRef();
 
   function generateCalendarHTML(data) {
     const getDayNumber = (index) => data[`day${index}`] || '';
@@ -176,7 +179,7 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
       }
     });
 
-    for (let d = 1; d <= lastDayOfMonth.getDate()+1; d++) {
+    for (let d = 1; d <= lastDayOfMonth.getDate() + 1; d++) {
       const index = startIndex + (d - 1);
       const date = new Date(year, viewStartDate.getMonth(), d);
       const dateStr = date.toISOString().split("T")[0];
@@ -186,7 +189,7 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
 
     calendarData.bg_image = backgroundImage;
     calendarData.date = new Date(year, viewStartDate.getMonth() + 1, 0).toISOString().split('T')[0];
-    calendarData.fontSize = '14px'; // Default, or make dynamic
+    calendarData.fontSize = '14px';
     return { calendarData, month, year };
   }
 
@@ -196,6 +199,20 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
 
     const html = generateCalendarHTML(calendarData);
 
+    // Set preview HTML for iframe rendering
+    setPreviewHTML(html);
+
+    // Delay writing to iframe to ensure state is updated
+    setTimeout(() => {
+      if (iframeRef.current) {
+        const doc = iframeRef.current.contentDocument || iframeRef.current.contentWindow.document;
+        doc.open();
+        doc.write(html);
+        doc.close();
+      }
+    }, 100);
+
+    // Download PDF
     const opt = {
       margin: 0,
       filename: `calendar-${month}-${year}.pdf`,
@@ -207,16 +224,12 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
       },
       jsPDF: {
         unit: 'px',
-        format: [1123, 794], // A4 landscape
+        format: [1123, 794],
         orientation: 'landscape'
       }
     };
 
     html2pdf().set(opt).from(html).save();
-  };
-
-  const handleDownloadWordClick = async () => {
-    // Keep your original Word download logic here
   };
 
   return (
@@ -229,8 +242,18 @@ export default function DownloadButtons({ userNotes, backgroundImage, calendarRe
       </p>
       <div className="download-buttons">
         <button className="download-button-pdf" onClick={handleDownloadPdfClick}>Download PDF</button>
-        {/* <button className="download-button-word" onClick={handleDownloadWordClick}>Download Word</button> */}
       </div>
+
+      {previewHTML && (
+        <div style={{ marginTop: '30px', border: '2px solid #ccc' }}>
+          <h3>Preview Calendar Below</h3>
+          <iframe
+            ref={iframeRef}
+            title="Calendar Preview"
+            style={{ width: '1123px', height: '794px', border: '1px solid black' }}
+          />
+        </div>
+      )}
     </div>
   );
 }
