@@ -123,10 +123,6 @@ return `
       font-family: "Roboto", sans-serif;
     }
 
-    td .evc-event {
-      font-size: 16px;
-    }
-
     #evc-calendar-table {
       width: 100%;
       height: 100%;
@@ -330,7 +326,7 @@ return `
     const html = generateCalendarHTML(calendarData);
 
     // Set preview HTML for iframe rendering
-    // setPreviewHTML(html);
+    setPreviewHTML(html);
 
     // Delay writing to iframe to ensure state is updated
     setTimeout(() => {
@@ -385,7 +381,7 @@ return `
         </button>
       </div>
 
-      {/* {previewHTML && (
+      {previewHTML && (
         <div style={{ marginTop: '30px', border: '2px solid #ccc' }}>
           <h3>Preview Calendar Below</h3>
           <iframe
@@ -394,7 +390,7 @@ return `
             style={{ width: '1123px', height: '794px', border: '1px solid black' }}
           />
         </div>
-      )} */}
+      )}
     </div>
   );
 }
