@@ -9,7 +9,7 @@ export default function DownloadButtons({
   visibleEvents,
   fontSize,
 }) {
-  const [previewHTML, setPreviewHTML] = useState('');
+  // const [previewHTML, setPreviewHTML] = useState('');
   const iframeRef = useRef();
   // console.log("Font size in DownloadButtons:", fontSize);
 
@@ -215,8 +215,8 @@ return `
     <table id="evc-page-header" style="width: 100%;">
       <tr>
         <td style="width: 25%"></td>
-        <td id="evc-month-year" colspan="5" style="text-align: center">
-          <h2 style="font-size: 27px !important; margin: 10px;">🗓 ${data.month} 
+        <td id="evc-month-year" colspan="5" style="text-align: center; vertical-align: middle;">
+          <h2 style="font-size: 27px !important; margin: 10px; ">🗓 ${data.month} 
           <span class="evc-highlight">${data.year}</span> Calendar</h2>
         </td>
         <td style="text-align: right; width: 25%; padding-right: 30px;">
@@ -227,13 +227,13 @@ return `
     <table id="evc-calendar-table">
       <thead id="evc-calendar-header">
         <tr style="font-size: 14px !important;">
-          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Sun</th>
-          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Mon</th>
-          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Tue</th>
-          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Wed</th>
-          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Thu</th>
-          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Fri</th>
-          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Sat</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important;">Sun</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important;">Mon</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important;">Tue</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important;">Wed</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important;">Thu</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important;">Fri</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important;">Sat</th>
         </tr>
       </thead>
       <tbody>${tableRows.join("\n")}</tbody>
@@ -336,7 +336,7 @@ return `
     const html = generateCalendarHTML(calendarData);
 
     // Set preview HTML for iframe rendering
-    setPreviewHTML(html);
+    // setPreviewHTML(html);
 
     // Delay writing to iframe to ensure state is updated
     setTimeout(() => {
@@ -391,7 +391,7 @@ return `
         </button>
       </div>
 
-      {previewHTML && (
+      {/* {previewHTML && (
         <div style={{ marginTop: '30px', border: '2px solid #ccc' }}>
           <h3>Preview Calendar Below</h3>
           <iframe
@@ -400,7 +400,7 @@ return `
             style={{ width: '1123px', height: '794px', border: '1px solid black' }}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 }
