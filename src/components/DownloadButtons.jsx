@@ -9,7 +9,7 @@ export default function DownloadButtons({
   visibleEvents,
   fontSize,
 }) {
-  // const [previewHTML, setPreviewHTML] = useState('');
+  const [previewHTML, setPreviewHTML] = useState('');
   const iframeRef = useRef();
   // console.log("Font size in DownloadButtons:", fontSize);
 
@@ -17,23 +17,53 @@ export default function DownloadButtons({
     const getDayNumber = (index) => data[`day${index}`] || "";
     const getEvent = (index) => data[`event${index}`] || "";
 
+    // Count how many real days exist in data
+    let totalDays = 0;
+    for (let i = 1; i <= 42; i++) {
+      if (getDayNumber(i) !== "") {
+        totalDays++;
+      }
+    }
+
+    // Find where the first day starts
+    let firstDayIndex = -1;
+    for (let i = 1; i <= 7; i++) {
+      if (getDayNumber(i) !== "") {
+        firstDayIndex = i - 1; // zero-based
+        break;
+      }
+    }
+
+    // Total cells needed = days + offset
+    const totalCellsUsed = totalDays + firstDayIndex;
+
+    // Calculate total rows needed
+    const totalRows = Math.ceil(totalCellsUsed / 7);
+
+    // Set td height accordingly
+    const tdHeightStyle =
+      totalRows === 6
+        ? "height: calc(100% / 6) !important;"
+        : "height: calc(100% / 5) !important;";
+
+
     const tableRows = [];
-    for (let row = 0; row < 6; row++) {
+    for (let row = 0; row < totalRows; row++) {
       const tds = [];
       for (let col = 0; col < 7; col++) {
         const index = row * 7 + col + 1;
         const day = getDayNumber(index);
         const eventText = getEvent(index);
         const isOutside = day === "";
-        const cellClasses = isOutside ? ' class="outside"' : "";
+        const cellClasses = isOutside ? ' class="evc-outside"' : "";
 
-        const dateHTML = `<div class="date-number">${day}</div>`;
+        const dateHTML = `<div class="evc-date-number">${day}</div>`;
         let eventHTML = "";
 
         if (eventText.trim()) {
           const lines = eventText
             .split("\n")
-            .map((line) => `<div class="event">${line}</div>`)
+            .map((line) => `<div class="evc-event">${line}</div>`)
             .join("");
           eventHTML = lines;
         }
@@ -41,7 +71,7 @@ export default function DownloadButtons({
         tds.push(
           `
           <td${cellClasses}>
-            <div class="cell-content">
+            <div class="evc-cell-content">
               ${dateHTML}
               ${eventHTML}
             </div>
@@ -51,101 +81,153 @@ export default function DownloadButtons({
       tableRows.push(`<tr>${tds.join("\n")}</tr>`);
     }
 
-    return `
+return `
 <!DOCTYPE html>
 <html>
 <head>
   <title>Calendar - ${data.month} ${data.year}</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Roboto:wght@400;700&display=swap');
-    html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
-    @page { size: A4 landscape; margin: 0; }
-    #calendar {
-      width: 1080px; height: 794px;
+    @import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
+    #evc-calendar {
+      width: 1080px;
+      height: 794px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
       margin: auto;
       background-image: url('${data.bg_image}');
       background-size: cover;
       background-position: center;
-      font-family: 'Roboto', sans-serif;
-      display: flex;
-      flex-direction: column;
+      background-repeat: no-repeat;
     }
-    #calendar-table {
-      width: 100%; height: 100%;
+
+    body {
+      font-size: 18px;
+    }
+
+    #evc-calendar-table {
+      font-size: 14px;
+      font-family: "Roboto", sans-serif;
+    }
+
+    td .evc-event {
+      font-size: 16px;
+    }
+
+    #evc-calendar-table {
+      width: 100%;
+      height: 100%;
       border-spacing: 5px;
       table-layout: fixed;
+      flex: 1;
+      box-sizing: border-box;
     }
-    #calendar th {
-      text-align: center; padding: 10px;
+
+    #evc-calendar th {
+      text-align: center;
+      padding: 10px;
       border-radius: 5px;
-      background-color: #7e57c2; color: white;
+      background-color: #7e57c2;
+      color: white;
     }
-    #calendar-table td {
+
+    #evc-calendar-table td {
       text-align: left;
       padding: 10px;
       border-radius: 5px;
+      position: relative;
       vertical-align: top;
+      overflow: hidden;
+      ${tdHeightStyle}
     }
-    #calendar-table td:not(.outside) {
-      background: linear-gradient(to bottom right, #fff, #f2f2f2);
+
+    #evc-calendar-table td:not(.evc-outside) {
+      background: linear-gradient(to bottom right, rgba(255, 255, 255, 1), rgba(242, 242, 242, 1));
       color: #000;
     }
-    #calendar-table td.outside {
+
+    #evc-calendar-table td.evc-outside {
       background-color: #f9f9f9;
       color: #aaa;
       opacity: 0.6;
     }
-    .date-number {
+
+    .evc-date-number {
       position: absolute;
-      top: 2px;
-      right: 2px;
+      top: 8px;
+      right: 10px;
       font-weight: bold;
-      font-size: 14px;
     }
-    .event {
-      padding: 2px 4px;
-      font-size: ${data.fontSize}px;
-      margin-top: 6px;
+
+    .evc-event {
+      text-align: left;
+      padding-left: 4px;
+      padding-right: 4px;
+      line-height: 1.2;
+      overflow: hidden;
+      word-wrap: break-word;
+      font-size: ${data.fontSize}px !important;
     }
-    .cell-content {
-      position: relative;
+
+    .evc-cell-content {
       box-sizing: border-box;
       padding-top: 10px;
+      overflow: hidden;
+      height: 80px;
     }
-    #page-header {
-      font-family: 'Lilita One', cursive;
-      text-align: center;
-      padding: 10px;
+
+    #evc-page-header {
+      font-family: 'Lilita One', sans-serif;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      font-size: 18px;
     }
-    #month-year {
+
+    #evc-month-year {
       background: white;
       border-radius: 50px;
     }
-    #month-year h2 {
+
+    #evc-month-year h2 {
+      padding: 0;
       margin: 10px;
       color: #1C0D5A;
-      font-size: 24px !important;
     }
-    .highlight {
+
+    .evc-highlight {
       color: #f76a0c;
     }
+
   </style>
 </head>
 <body>
-  <div id="calendar">
-    <table id="page-header" style="width: 100%;">
+  <div id="evc-calendar">
+    <table id="evc-page-header" style="width: 100%;">
       <tr>
         <td style="width: 25%"></td>
-        <td id="month-year" colspan="5"><h2>🗓 ${
+        <td id="evc-month-year" colspan="5" style="text-align: center"><h2>🗓 ${
           data.month
-        } <span class="highlight">${data.year}</span> Calendar</h2></td>
-        <td style="text-align: right; padding-right: 30px;">
-          <img src="https://downloads.memorylanetherapy.com/uploads/2023/05/cropped-MLT-LOGO-3.png" width="150" />
+        } <span class="evc-highlight">${data.year}</span> Calendar</h2></td>
+        <td style="text-align: right; width: 25%; padding-right: 30px;">
+          <img class="evc-business-logo" src="https://downloads.memorylanetherapy.com/uploads/2023/05/cropped-MLT-LOGO-3.png" alt="Logo" width="150" />
         </td>
       </tr>
     </table>
-    <table id="calendar-table">
-      <thead id="calendar-header">
+    <table id="evc-calendar-table">
+      <thead id="evc-calendar-header">
         <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
       </thead>
       <tbody>${tableRows.join("\n")}</tbody>
@@ -154,20 +236,21 @@ export default function DownloadButtons({
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const calendar = document.getElementById("calendar");
-      const allCells = document.querySelectorAll("#calendar-table td");
+      const calendar = document.getElementById("evc-calendar");
+      const allCells = document.querySelectorAll("#evc-calendar-table td");
       const calendarHeight = calendar.offsetHeight;
-      const rows = document.querySelectorAll("#calendar-table tbody tr");
-      const header = document.getElementById("calendar-header");
-      const headerHeight = header?.offsetHeight || 0;
+      const rows = document.querySelectorAll("#evc-calendar-table tr");
+      const header = document.getElementById("evc-calendar-header");
+      const headerHeight = header.offsetHeight || 0;
       const availableHeight = calendarHeight - headerHeight;
-      const rowHeight = Math.floor(availableHeight / (rows.length + 1)); // +1 for header
+      const rowHeight = Math.floor(availableHeight / (rows.length + 1));
 
       allCells.forEach((cell) => {
         cell.style.height = rowHeight + "px";
-        const content = cell.querySelector(".cell-content");
+
+        const content = cell.querySelector(".evc-cell-content");
         if (content) {
-          content.style.height = rowHeight + "px";
+          cell.style.height = rowHeight + "px";
           content.style.overflow = "hidden";
         }
       });
@@ -175,6 +258,7 @@ export default function DownloadButtons({
   </script>
 </body>
 </html>`;
+
   }
 
   function prepareCalendarData(
