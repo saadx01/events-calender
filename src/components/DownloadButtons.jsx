@@ -23,7 +23,7 @@ export default function DownloadButtons({
       if (getDayNumber(i) !== "") {
         totalDays++;
       }
-    }
+    } 
 
     // Find where the first day starts
     let firstDayIndex = -1;
@@ -46,6 +46,10 @@ export default function DownloadButtons({
         ? "height: calc(100% / 6) !important;"
         : "height: calc(100% / 5) !important;";
 
+    const cellContentHeightStyle =
+      totalRows === 6
+        ? "height: 82px !important;"
+        : "height: 105px !important;";
 
     const tableRows = [];
     for (let row = 0; row < totalRows; row++) {
@@ -147,7 +151,6 @@ return `
       border-radius: 5px;
       position: relative;
       vertical-align: top;
-      /*overflow: hidden;*/
       ${tdHeightStyle}
     }
 
@@ -173,9 +176,7 @@ return `
       text-align: left;
       padding-left: 4px;
       padding-right: 4px;
-      line-height: 1.2em !important;
-      /*overflow: hidden;*/
-      /*word-wrap: break-word;*/
+      line-height: 1em !important;
       font-size: ${data.fontSize}px !important;
       height: auto !important;
     }
@@ -184,19 +185,19 @@ return `
       box-sizing: border-box;
       padding-top: 10px;
       overflow: hidden;
-      height: 80px;
+      ${cellContentHeightStyle}
     }
 
     #evc-page-header {
       font-family: 'Lilita One', sans-serif;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      font-size: 18px;
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+      font-size: 18px !important;
     }
 
     #evc-month-year {
       background: white;
-      border-radius: 50px;
+      border-radius: 50px !important;
     }
 
     #evc-month-year h2 {
