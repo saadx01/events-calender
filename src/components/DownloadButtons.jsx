@@ -124,17 +124,15 @@ return `
     }
 
     #evc-calendar-table {
-      font-size: 14px;
-      font-family: "Roboto", sans-serif;
-    }
-
-    #evc-calendar-table {
       width: 100%;
       height: 100%;
       border-spacing: 5px;
       table-layout: fixed;
       flex: 1;
       box-sizing: border-box;
+      font-size: 14px;
+      font-family: "Roboto", sans-serif;
+      margin: 0px !important;
     }
 
     #evc-calendar th {
@@ -143,7 +141,6 @@ return `
       border-radius: 5px !important;
       background-color: #7e57c2;
       color: white;
-      vertical-align: middle !important;
     }
 
     #evc-calendar-table td {
@@ -194,6 +191,7 @@ return `
       padding-top: 10px !important;
       padding-bottom: 10px !important;
       font-size: 18px !important;
+      margin: 0px !important;
     }
 
     #evc-month-year {
@@ -228,7 +226,15 @@ return `
     </table>
     <table id="evc-calendar-table">
       <thead id="evc-calendar-header">
-        <tr style="font-size: 14px !important;"><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+        <tr style="font-size: 14px !important;">
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Sun</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Mon</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Tue</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Wed</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Thu</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Fri</th>
+          <th style="height: 37px !important; vertical-align: middle !important; text-align: center !important; line-height: 37px !important;">Sat</th>
+        </tr>
       </thead>
       <tbody>${tableRows.join("\n")}</tbody>
     </table>
