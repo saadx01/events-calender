@@ -143,6 +143,7 @@ return `
       border-radius: 5px !important;
       background-color: #7e57c2;
       color: white;
+      vertical-align: middle !important;
     }
 
     #evc-calendar-table td {
@@ -216,9 +217,10 @@ return `
     <table id="evc-page-header" style="width: 100%;">
       <tr>
         <td style="width: 25%"></td>
-        <td id="evc-month-year" colspan="5" style="text-align: center"><h2 style="font-size: 18px !important; margin: 10px;">🗓 ${
-          data.month
-        } <span class="evc-highlight">${data.year}</span> Calendar</h2></td>
+        <td id="evc-month-year" colspan="5" style="text-align: center">
+          <h2 style="font-size: 27px !important; margin: 10px;">🗓 ${data.month} 
+          <span class="evc-highlight">${data.year}</span> Calendar</h2>
+        </td>
         <td style="text-align: right; width: 25%; padding-right: 30px;">
           <img class="evc-business-logo" src="https://downloads.memorylanetherapy.com/uploads/2023/05/cropped-MLT-LOGO-3.png" alt="Logo" width="150" />
         </td>
@@ -226,7 +228,7 @@ return `
     </table>
     <table id="evc-calendar-table">
       <thead id="evc-calendar-header">
-        <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+        <tr style="font-size: 14px !important;"><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
       </thead>
       <tbody>${tableRows.join("\n")}</tbody>
     </table>

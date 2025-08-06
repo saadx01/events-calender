@@ -23,7 +23,7 @@ function enqueue_vite_react_app() {
     // ✅ Replace with your actual Vite build filenames
     echo '<link rel="stylesheet" href="' . $plugin_url . 'assets/index-CPdGHBOz.css">';
     echo '<div id="root"></div>';
-    echo '<script type="module" src="' . $plugin_url . 'assets/index-DUhWBbxi.js"></script>';
+    echo '<script type="module" src="' . $plugin_url . 'assets/index-CABpJpD4.js"></script>';
 
     enqueue_scripts();
 }
