@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Events Calender
  * Description: Embeds Events Calender Vite-built React app into WordPress using a shortcode.
- * Version: 1.0
+ * Version: 1.1.232100
  * Author: Saad ur Rehman
  */
 
