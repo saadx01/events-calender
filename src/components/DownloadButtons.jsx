@@ -138,9 +138,9 @@ return `
     }
 
     #evc-calendar th {
-      text-align: center;
-      padding: 10px;
-      border-radius: 5px;
+      text-align: center !important;
+      padding: 10px !important;
+      border-radius: 5px !important;
       background-color: #7e57c2;
       color: white;
     }
@@ -202,7 +202,6 @@ return `
 
     #evc-month-year h2 {
       padding: 0;
-      margin: 10px;
       color: #1C0D5A;
     }
 
@@ -217,7 +216,7 @@ return `
     <table id="evc-page-header" style="width: 100%;">
       <tr>
         <td style="width: 25%"></td>
-        <td id="evc-month-year" colspan="5" style="text-align: center"><h2>🗓 ${
+        <td id="evc-month-year" colspan="5" style="text-align: center"><h2 style="font-size: 18px !important; margin: 10px;">🗓 ${
           data.month
         } <span class="evc-highlight">${data.year}</span> Calendar</h2></td>
         <td style="text-align: right; width: 25%; padding-right: 30px;">
