@@ -112,6 +112,7 @@ return `
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      padding-bottom: 10px;
     }
 
     body {
@@ -146,7 +147,7 @@ return `
       border-radius: 5px;
       position: relative;
       vertical-align: top;
-      overflow: hidden;
+      /*overflow: hidden;*/
       ${tdHeightStyle}
     }
 
@@ -172,10 +173,11 @@ return `
       text-align: left;
       padding-left: 4px;
       padding-right: 4px;
-      line-height: 1.2;
-      overflow: hidden;
-      word-wrap: break-word;
+      line-height: 1.2em !important;
+      /*overflow: hidden;*/
+      /*word-wrap: break-word;*/
       font-size: ${data.fontSize}px !important;
+      height: auto !important;
     }
 
     .evc-cell-content {
