@@ -37,9 +37,12 @@ export default function CalendarPage() {
       try {
         // const res = await axios.get('https://newstaging.memorylanetherapy.com/wp-json/activities/v1/search', {
 
-        const res = await axios.get(`${ar_event_calendar_data.root_url}/wp-json/activities/v1/search`, {
-          withCredentials: true
-        });
+        const res = await axios.get(
+          `${ar_event_calendar_data.root_url}/wp-json/activities/v1/search`,
+          {
+            withCredentials: true,
+          }
+        );
 
         // const res = {
         //   data: {
@@ -506,6 +509,12 @@ export default function CalendarPage() {
           }}
           dateClick={handleDateClick}
           ref={calendarRef}
+          eventDidMount={(info) => {
+            if (info.el.tagName === "A") {
+              info.el.setAttribute("target", "_blank");
+              info.el.setAttribute("rel", "noopener noreferrer"); // security best practice
+            }
+          }}
         />
       </div>
 
@@ -570,5 +579,5 @@ function getColor(category) {
     creative: "orange",
     user: "purple",
   };
-  return colors[category] || "black";
+  return colors[category] || "white";
 }

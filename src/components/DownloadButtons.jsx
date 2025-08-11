@@ -9,7 +9,8 @@ export default function DownloadButtons({
   visibleEvents,
   fontSize,
 }) {
-  // const [previewHTML, setPreviewHTML] = useState('');
+  // const [previewHTML, setPreviewHTML] = useState("");
+  const [isDownloading, setIsDownloading] = useState(false);
   const iframeRef = useRef();
   // console.log("Font size in DownloadButtons:", fontSize);
 
@@ -23,7 +24,7 @@ export default function DownloadButtons({
       if (getDayNumber(i) !== "") {
         totalDays++;
       }
-    } 
+    }
 
     // Find where the first day starts
     let firstDayIndex = -1;
@@ -49,7 +50,7 @@ export default function DownloadButtons({
     const cellContentHeightStyle =
       totalRows === 6
         ? "height: 82px !important;"
-        : "height: 105px !important;";
+        : "height: 107px !important;";
 
     const tableRows = [];
     for (let row = 0; row < totalRows; row++) {
@@ -85,7 +86,7 @@ export default function DownloadButtons({
       tableRows.push(`<tr>${tds.join("\n")}</tr>`);
     }
 
-return `
+    return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -216,7 +217,9 @@ return `
       <tr>
         <td style="width: 25%"></td>
         <td id="evc-month-year" colspan="5" style="text-align: center; vertical-align: middle;">
-          <h2 style="font-size: 27px !important; margin: 10px; ">🗓 ${data.month} 
+          <h2 style="font-size: 27px !important; margin: 10px; ">🗓 ${
+            data.month
+          } 
           <span class="evc-highlight">${data.year}</span> Calendar</h2>
         </td>
         <td style="text-align: right; width: 25%; padding-right: 30px;">
@@ -264,7 +267,6 @@ return `
   </script>
 </body>
 </html>`;
-
   }
 
   function prepareCalendarData(
@@ -324,51 +326,62 @@ return `
     return { calendarData, month, year };
   }
 
-  const handleDownloadPdfClick = () => {
-    const calendarApi = calendarRef.current?.getApi();
-    const { calendarData, month, year } = prepareCalendarData(
-      calendarApi,
-      visibleEvents,
-      userNotes,
-      backgroundImage
-    );
+  const handleDownloadPdfClick = async () => {
+    try {
+      setIsDownloading(true);
+      
+      // Let React render the loader first
+      await new Promise(resolve => setTimeout(resolve, 0));
 
-    const html = generateCalendarHTML(calendarData);
+      const calendarApi = calendarRef.current?.getApi();
+      const { calendarData, month, year } = prepareCalendarData(
+        calendarApi,
+        visibleEvents,
+        userNotes,
+        backgroundImage
+      );
 
-    // Set preview HTML for iframe rendering
-    // setPreviewHTML(html);
+      const html = generateCalendarHTML(calendarData);
 
-    // Delay writing to iframe to ensure state is updated
-    setTimeout(() => {
-      if (iframeRef.current) {
-        const doc =
-          iframeRef.current.contentDocument ||
-          iframeRef.current.contentWindow.document;
-        doc.open();
-        doc.write(html);
-        doc.close();
-      }
-    }, 100);
+      // Set preview HTML for iframe rendering
+      // setPreviewHTML(html);
 
-    // Download PDF
-    const opt = {
-      margin: 0,
-      filename: `calendar-${month}-${year}.pdf`,
-      image: { type: "jpeg", quality: 1 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: null,
-      },
-      jsPDF: {
-        unit: "px",
-        format: [1123, 794],
-        // format: [1123, 900],
-        orientation: "landscape",
-      },
-    };
+      // Delay writing to iframe to ensure state is updated
+      setTimeout(() => {
+        if (iframeRef.current) {
+          const doc =
+            iframeRef.current.contentDocument ||
+            iframeRef.current.contentWindow.document;
+          doc.open();
+          doc.write(html);
+          doc.close();
+        }
+      }, 100);
 
-    html2pdf().set(opt).from(html).save();
+      // Download PDF
+      const opt = {
+        margin: 0,
+        filename: `calendar-${month}-${year}.pdf`,
+        image: { type: "jpeg", quality: 1 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: null,
+        },
+        jsPDF: {
+          unit: "px",
+          format: [1123, 794],
+          // format: [1123, 900],
+          orientation: "landscape",
+        },
+      };
+
+      html2pdf().set(opt).from(html).save();
+    } catch (err) {
+      console.error("PDF download failed", err);
+    } finally {
+      setIsDownloading(false); // stop loader no matter what
+    }
   };
 
   return (
@@ -386,18 +399,23 @@ return `
         <button
           className="download-button-pdf"
           onClick={handleDownloadPdfClick}
+          disabled={isDownloading}
         >
-          Download PDF
+          {isDownloading ? <span className="loader"></span> : "Download PDF"}
         </button>
       </div>
 
       {/* {previewHTML && (
-        <div style={{ marginTop: '30px', border: '2px solid #ccc' }}>
+        <div style={{ marginTop: "30px", border: "2px solid #ccc" }}>
           <h3>Preview Calendar Below</h3>
           <iframe
             ref={iframeRef}
             title="Calendar Preview"
-            style={{ width: '1123px', height: '794px', border: '1px solid black' }}
+            style={{
+              width: "1123px",
+              height: "794px",
+              border: "1px solid black",
+            }}
           />
         </div>
       )} */}

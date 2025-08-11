@@ -93,8 +93,10 @@ export default function TopButtons({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        (dropdownRef.current && !dropdownRef.current.contains(event.target)) &&
-        (sliderRef.current && !sliderRef.current.contains(event.target))
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        sliderRef.current &&
+        !sliderRef.current.contains(event.target)
       ) {
         setShowDropdown(false);
         setShowFontSlider(false);
@@ -154,8 +156,23 @@ export default function TopButtons({
         )}
       </div>
 
+      <div className="font-slider-wrapper">
+          <label className="slider-label">
+            Font Size: <span>{fontSize}</span>
+          </label>
+        <input
+          type="range"
+          min="10"
+          max="30"
+          step="1"
+          value={fontSize}
+          onChange={(e) => setFontSize(parseInt(e.target.value))}
+          className="styled-slider"
+        />
+      </div>
+
       {/* 3. Font Size Slider */}
-      <div className="font-slider-wrapper" ref={sliderRef}>
+      {/* <div className="font-slider-wrapper" ref={sliderRef}>
         <button className="button-effect" onClick={toggleFontSlider}>
           Font Size
         </button>
@@ -173,7 +190,7 @@ export default function TopButtons({
             />
           </div>
         )}
-      </div>
+      </div> */}
 
       <input
         type="file"

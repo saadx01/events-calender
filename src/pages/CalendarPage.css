@@ -51,6 +51,209 @@
 }
 
 
+.button-effect {
+  border-color: var(--global-palette-btn-bg-hover, #1768ea) !important;
+  border-top-color: rgb(223, 86, 6) !important;
+  border-right-color: rgb(223, 86, 64) !important;
+  border-bottom-color: rgb(223, 86, 64) !important;
+  border-left-color: rgb(223, 86, 64) !important;
+  color: var(--global-palette-btn-hover, #ffffff) !important;
+  background: var(--global-palette-btn-bg-hover, #1768ea) !important;
+
+  background-image: initial !important;
+  background-position-x: initial !important;
+  background-position-y: initial !important;
+  background-size: initial !important;
+  background-repeat: initial !important;
+  background-attachment: initial !important;
+  background-origin: initial !important;
+  background-clip: initial !important;
+  background-color: rgb(223, 86, 64) !important;
+
+  border-radius: 25px !important;
+  font-family: 'Lilita One', var(--global-display-fallback-font, sans-serif) !important;
+
+}
+
+.button-effect:hover {
+  background: #df5640 !important;
+}
+
+
+
+.fc-today-button.fc-button,
+.button-effect {
+  border-color: var(--global-palette-btn-bg-hover, #1768ea) !important;
+  border-top-color: rgb(223, 86, 6) !important;
+  border-right-color: rgb(223, 86, 64) !important;
+  border-bottom-color: rgb(223, 86, 64) !important;
+  border-left-color: rgb(223, 86, 64) !important;
+  color: var(--global-palette-btn-hover, #ffffff) !important;
+  background: var(--global-palette-btn-bg-hover, #1768ea) !important;
+
+  background-image: initial !important;
+  background-position-x: initial !important;
+  background-position-y: initial !important;
+  background-size: initial !important;
+  background-repeat: initial !important;
+  background-attachment: initial !important;
+  background-origin: initial !important;
+  background-clip: initial !important;
+  background-color: rgb(223, 86, 64) !important;
+
+  border-radius: 25px !important;
+
+}
+
+                                 /* Dropdown buttons CSS */
+
+/* Dropdown container */
+.filter-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown itself */
+.filter-dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  z-index: 100;
+  min-width: 180px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Each label */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Checkbox styling */
+.checkbox-label input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+
+/* Font size slider styling */
+
+/* Slider Wrapper */
+.font-slider-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 25px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  font-family: 'Lilita One', sans-serif;
+}
+
+/* Label */
+.slider-label {
+  font-size: 16px;
+  color: rgb(45, 67, 109);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Modern Range Input */
+.styled-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 140px;
+  height: 8px;
+  background: #ddd; /* ✅ Always visible track */
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Track (Firefox) */
+.styled-slider::-moz-range-track {
+  height: 8px;
+  background: #ddd;
+  border-radius: 5px;
+}
+
+/* Thumb */
+.styled-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #df5640;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s;
+}
+
+.styled-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: #c94b38; /* Slightly darker on hover */
+}
+
+.styled-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #df5640;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  transition: transform 0.15s ease, background 0.2s;
+}
+
+.styled-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  background: #c94b38;
+}
+
+
+
+/* Set Font size Styling */
+
+/* .font-slider-popover {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 8px;
+  width: 180px;
+  z-index: 100;
+}
+
+.font-slider-popover input[type="range"] {
+  width: 100%;
+  -webkit-appearance: auto !important;
+}
+
+.slider-label {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #333;
+} */
+
+
+.fc-event-custom, .day-note-preview {
+  font-size: var(--event-font-size, 12px);
+}
+
+
+
 /* .top-bar button:hover {
   border: 2px solid #b4b4b4;
 } */
@@ -320,59 +523,6 @@ a.fc-daygrid-day-number {
   color: var(--global-palette4) !important;
 }
 
-.button-effect {
-  border-color: var(--global-palette-btn-bg-hover, #1768ea) !important;
-  border-top-color: rgb(223, 86, 6) !important;
-  border-right-color: rgb(223, 86, 64) !important;
-  border-bottom-color: rgb(223, 86, 64) !important;
-  border-left-color: rgb(223, 86, 64) !important;
-  color: var(--global-palette-btn-hover, #ffffff) !important;
-  background: var(--global-palette-btn-bg-hover, #1768ea) !important;
-
-  background-image: initial !important;
-  background-position-x: initial !important;
-  background-position-y: initial !important;
-  background-size: initial !important;
-  background-repeat: initial !important;
-  background-attachment: initial !important;
-  background-origin: initial !important;
-  background-clip: initial !important;
-  background-color: rgb(223, 86, 64) !important;
-
-  border-radius: 25px !important;
-  font-family: 'Lilita One', var(--global-display-fallback-font, sans-serif) !important;
-
-}
-
-.button-effect:hover {
-  background: #df5640 !important;
-}
-
-
-
-.fc-today-button.fc-button,
-.button-effect {
-  border-color: var(--global-palette-btn-bg-hover, #1768ea) !important;
-  border-top-color: rgb(223, 86, 6) !important;
-  border-right-color: rgb(223, 86, 64) !important;
-  border-bottom-color: rgb(223, 86, 64) !important;
-  border-left-color: rgb(223, 86, 64) !important;
-  color: var(--global-palette-btn-hover, #ffffff) !important;
-  background: var(--global-palette-btn-bg-hover, #1768ea) !important;
-
-  background-image: initial !important;
-  background-position-x: initial !important;
-  background-position-y: initial !important;
-  background-size: initial !important;
-  background-repeat: initial !important;
-  background-attachment: initial !important;
-  background-origin: initial !important;
-  background-clip: initial !important;
-  background-color: rgb(223, 86, 64) !important;
-
-  border-radius: 25px !important;
-
-}
 
 .fc-prev-button {
   border: none !important;
@@ -467,76 +617,3 @@ a.fc-daygrid-day-number {
 }
 
 
-                                 /* Dropdown buttons CSS */
-
-/* Dropdown container */
-.filter-dropdown-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-/* Dropdown itself */
-.filter-dropdown {
-  position: absolute;
-  top: 110%;
-  left: 0;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 0.75rem 1rem;
-  z-index: 100;
-  min-width: 180px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-/* Each label */
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-/* Checkbox styling */
-.checkbox-label input[type="checkbox"] {
-  transform: scale(1.2);
-  cursor: pointer;
-}
-
-
-
-
-/* Set Font size Styling */
-
-.font-slider-popover {
-  position: absolute;
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 8px;
-  width: 180px;
-  z-index: 100;
-}
-
-.font-slider-popover input[type="range"] {
-  width: 100%;
-  -webkit-appearance: auto !important;
-}
-
-.slider-label {
-  font-size: 16px;
-  margin-bottom: 8px;
-  color: #333;
-}
-
-.font-slider-popover input[type="range"] {
-  width: 100%;
-}
-
-.fc-event-custom, .day-note-preview {
-  font-size: var(--event-font-size, 12px);
-}
