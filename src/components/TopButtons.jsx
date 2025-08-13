@@ -158,7 +158,7 @@ export default function TopButtons({
 
       <div className="font-slider-wrapper">
           <label className="slider-label">
-            Font Size: <span>{fontSize}</span>
+            Font Size
           </label>
         <input
           type="range"
@@ -169,6 +169,7 @@ export default function TopButtons({
           onChange={(e) => setFontSize(parseInt(e.target.value))}
           className="styled-slider"
         />
+        <span>{fontSize}</span>
       </div>
 
       {/* 3. Font Size Slider */}
