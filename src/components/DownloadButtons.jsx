@@ -147,10 +147,15 @@ export default function DownloadButtons({
     #evc-calendar-table td {
       text-align: left;
       padding: 10px;
+      padding-top: 0px !important;
       border-radius: 5px;
       position: relative;
       vertical-align: top;
       ${tdHeightStyle}
+    }
+
+    #evc-calendar-table tr {
+      ${tdHeightStyle} /* fixed row height respected in Safari */
     }
 
     #evc-calendar-table td:not(.evc-outside) {
@@ -166,7 +171,7 @@ export default function DownloadButtons({
 
     .evc-date-number {
       position: absolute;
-      top: 8px;
+      top: 5px;
       right: 10px;
       font-weight: bold;
     }
@@ -244,26 +249,26 @@ export default function DownloadButtons({
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const calendar = document.getElementById("evc-calendar");
-      const allCells = document.querySelectorAll("#evc-calendar-table td");
-      const calendarHeight = calendar.offsetHeight;
-      const rows = document.querySelectorAll("#evc-calendar-table tr");
-      const header = document.getElementById("evc-calendar-header");
-      const headerHeight = header.offsetHeight || 0;
-      const availableHeight = calendarHeight - headerHeight;
-      const rowHeight = Math.floor(availableHeight / (rows.length + 1));
+    // document.addEventListener("DOMContentLoaded", () => {
+    //   const calendar = document.getElementById("evc-calendar");
+    //   const allCells = document.querySelectorAll("#evc-calendar-table td");
+    //   const calendarHeight = calendar.offsetHeight;
+    //   const rows = document.querySelectorAll("#evc-calendar-table tr");
+    //   const header = document.getElementById("evc-calendar-header");
+    //   const headerHeight = header.offsetHeight || 0;
+    //   const availableHeight = calendarHeight - headerHeight;
+    //   const rowHeight = Math.floor(availableHeight / (rows.length + 1));
 
-      allCells.forEach((cell) => {
-        cell.style.height = rowHeight + "px";
+    //   allCells.forEach((cell) => {
+    //     cell.style.height = rowHeight + "px";
 
-        const content = cell.querySelector(".evc-cell-content");
-        if (content) {
-          cell.style.height = rowHeight + "px";
-          content.style.overflow = "hidden";
-        }
-      });
-    });
+    //     const content = cell.querySelector(".evc-cell-content");
+    //     if (content) {
+    //       cell.style.height = rowHeight + "px";
+    //       content.style.overflow = "hidden";
+    //     }
+    //   });
+    // });
   </script>
 </body>
 </html>`;
