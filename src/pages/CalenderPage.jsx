@@ -37,200 +37,200 @@ export default function CalendarPage() {
       try {
         // const res = await axios.get('https://newstaging.memorylanetherapy.com/wp-json/activities/v1/search', {
 
-        // const res = await axios.get(
-        //   `${ar_event_calendar_data.root_url}/wp-json/activities/v1/search`,
-        //   {
-        //     withCredentials: true,
-        //   }
-        // );
+        const res = await axios.get(
+          `${ar_event_calendar_data.root_url}/wp-json/activities/v1/search`,
+          {
+            withCredentials: true,
+          }
+        );
 
-        const res = {
-          data: {
-            activities: [
-              {
-                id: 524,
-                name: "Australia Day",
-                link: "https://newstaging.memorylanetherapy.com/calendar-for-aged-care/january/australia-day/",
-                date: "20230926",
-                color: "#6E5AE2",
-                hover_color: "#6E5AE2",
-              },
-              {
-                id: 534,
-                name: "Betty White's birthday",
-                link: "https://newstaging.memorylanetherapy.com/calendar-for-aged-care/january/betty-whites-birthday/",
-                date: "20230117",
-                color: "#6E5AE2",
-                hover_color: "#6E5AE2",
-              },
-              {
-                id: 522,
-                name: "Elvis Presley's Birthday",
-                link: "https://newstaging.memorylanetherapy.com/calendar-for-aged-care/january/elvis-presleys-birthday/",
-                date: "20230918",
-                color: "#6E5AE2",
-                hover_color: "#6E5AE2",
-              },
-              {
-                id: 601,
-                name: "World Chocolate Day",
-                link: "https://newstaging.memorylanetherapy.com/calendar/july/world-chocolate-day/",
-                date: "20250707", // 🔥 Current July
-                color: "#6E5AE2",
-                hover_color: "#6E5AE2",
-              },
-              {
-                id: 602,
-                name: "Picnic Day",
-                link: "https://newstaging.memorylanetherapy.com/calendar/july/picnic-day/",
-                date: "20250710", // 🔥 Current July
-                color: "#6E5AE2",
-                hover_color: "#6E5AE2",
-              },
-              {
-                id: 603,
-                name: "Enjoyment Day",
-                link: "https://newstaging.memorylanetherapy.com/calendar/july/picnic-day/",
-                date: "20250712", // 🔥 Current July
-                color: "#6E5AE3",
-                hover_color: "#6E5AE2",
-              },
-            ],
-            calendar_custom_events: [
-              {
-                id: 24471,
-                title: "Pakistan’s Independence Day",
-                author: "Up Work",
-                date: "2023/07/14",
-                type: "calendar-events",
-                category: "reminders",
-                color: "#7bb591",
-              },
-              {
-                id: 24472,
-                title: "Team Outing",
-                author: "Admin",
-                date: "2025/07/15", // 🔥 Current July
-                type: "calendar-events",
-                category: "celebration",
-                color: "#FF9800",
-              },
-              {
-                id: 24473,
-                title: "Music Therapy Session",
-                author: "Admin",
-                date: "2025/07/20", // 🔥 Current July
-                type: "calendar-events",
-                category: "reminders",
-                color: "#7bb591",
-              },
-              {
-                id: 24473,
-                title: "Weekly Reflection",
-                author: "Admin",
-                date: "2025/07/31",
-                type: "calendar-events",
-                category: "reminders",
-                color: "#7bb591",
-              },
-              {
-                id: 24473,
-                title: "Testing",
-                author: "Admin",
-                date: "2025/08/31",
-                type: "calendar-events",
-                category: "celebration",
-                color: "#FF9800",
-              },
-              {
-                id: 24473,
-                title: "Testing2",
-                author: "Admin",
-                date: "2025/08/01",
-                type: "calendar-events",
-                category: "reminders",
-                color: "#7bb591",
-              },
-            ],
-            member_events: [
-              {
-                id: 36250,
-                title: "Auto Draft",
-                author: "Up Work",
-                date: null,
-                type: "member-events",
-                color: "#FF7276",
-              },
-              {
-                id: 36249,
-                title: "Auto Draft",
-                author: "Up Work",
-                date: null,
-                type: "member-events",
-                color: "#FF7276",
-              },
-              {
-                id: 36091,
-                title: "how",
-                author: "Up Work",
-                date: "2025/05/06",
-                type: "member-events",
-                color: "#FF7276",
-              },
-              {
-                id: 36090,
-                title: "Daily Journal",
-                author: "Up Work",
-                date: "2025/07/03", // 🔥 Current July
-                type: "member-events",
-                color: "#FF7276",
-              },
-              {
-                id: 36089,
-                title: "Reminder: Call Family",
-                author: "Up Work",
-                date: "2025/07/05", // 🔥 Current July
-                type: "member-events",
-                color: "#FF7276",
-              },
-              {
-                id: 36088,
-                title: "Write Poem",
-                author: "Up Work",
-                date: "2025/07/10", // 🔥 Current July
-                type: "member-events",
-                color: "#FF7276",
-              },
-            ],
-            calendar_default_icon_url:
-              "https://newstaging.memorylanetherapy.com/downloads/uploads/woocommerce-placeholder.png",
-            calendar_icons: [
-              {
-                id: 36092,
-                author: "Up Work",
-                date: "2025/05/01",
-                type: "calendar-icon",
-                link: "",
-              },
-              {
-                id: 28473,
-                author: "Up Work",
-                date: "2024/03/06",
-                type: "calendar-icon",
-                link: "https://newstaging.memorylanetherapy.com/wp-content/Event-calendar-uploads/Elegant-QA-Live-Session-Instagram-Post-17.png",
-              },
-              {
-                id: 28471,
-                author: "Up Work",
-                date: "2024/03/07",
-                type: "calendar-icon",
-                link: "https://newstaging.memorylanetherapy.com/wp-content/Event-calendar-uploads/Default-Calendar-Background-2.jpg",
-              },
-            ],
-            calendar_bg:
-              "https://newstaging.memorylanetherapy.com/wp-content/uploads/2023/11/Default-Calendar-Background.jpg",
-          },
-        };
+        // const res = {
+        //   data: {
+        //     activities: [
+        //       {
+        //         id: 524,
+        //         name: "Australia Day",
+        //         link: "https://newstaging.memorylanetherapy.com/calendar-for-aged-care/january/australia-day/",
+        //         date: "20230926",
+        //         color: "#6E5AE2",
+        //         hover_color: "#6E5AE2",
+        //       },
+        //       {
+        //         id: 534,
+        //         name: "Betty White's birthday",
+        //         link: "https://newstaging.memorylanetherapy.com/calendar-for-aged-care/january/betty-whites-birthday/",
+        //         date: "20230117",
+        //         color: "#6E5AE2",
+        //         hover_color: "#6E5AE2",
+        //       },
+        //       {
+        //         id: 522,
+        //         name: "Elvis Presley's Birthday",
+        //         link: "https://newstaging.memorylanetherapy.com/calendar-for-aged-care/january/elvis-presleys-birthday/",
+        //         date: "20230918",
+        //         color: "#6E5AE2",
+        //         hover_color: "#6E5AE2",
+        //       },
+        //       {
+        //         id: 601,
+        //         name: "World Chocolate Day",
+        //         link: "https://newstaging.memorylanetherapy.com/calendar/july/world-chocolate-day/",
+        //         date: "20250707", // 🔥 Current July
+        //         color: "#6E5AE2",
+        //         hover_color: "#6E5AE2",
+        //       },
+        //       {
+        //         id: 602,
+        //         name: "Picnic Day",
+        //         link: "https://newstaging.memorylanetherapy.com/calendar/july/picnic-day/",
+        //         date: "20250710", // 🔥 Current July
+        //         color: "#6E5AE2",
+        //         hover_color: "#6E5AE2",
+        //       },
+        //       {
+        //         id: 603,
+        //         name: "Enjoyment Day",
+        //         link: "https://newstaging.memorylanetherapy.com/calendar/july/picnic-day/",
+        //         date: "20250712", // 🔥 Current July
+        //         color: "#6E5AE3",
+        //         hover_color: "#6E5AE2",
+        //       },
+        //     ],
+        //     calendar_custom_events: [
+        //       {
+        //         id: 24471,
+        //         title: "Pakistan’s Independence Day",
+        //         author: "Up Work",
+        //         date: "2023/07/14",
+        //         type: "calendar-events",
+        //         category: "reminders",
+        //         color: "#7bb591",
+        //       },
+        //       {
+        //         id: 24472,
+        //         title: "Team Outing",
+        //         author: "Admin",
+        //         date: "2025/07/15", // 🔥 Current July
+        //         type: "calendar-events",
+        //         category: "celebration",
+        //         color: "#FF9800",
+        //       },
+        //       {
+        //         id: 24473,
+        //         title: "Music Therapy Session",
+        //         author: "Admin",
+        //         date: "2025/07/20", // 🔥 Current July
+        //         type: "calendar-events",
+        //         category: "reminders",
+        //         color: "#7bb591",
+        //       },
+        //       {
+        //         id: 24473,
+        //         title: "Weekly Reflection",
+        //         author: "Admin",
+        //         date: "2025/07/31",
+        //         type: "calendar-events",
+        //         category: "reminders",
+        //         color: "#7bb591",
+        //       },
+        //       {
+        //         id: 24473,
+        //         title: "Testing",
+        //         author: "Admin",
+        //         date: "2025/08/31",
+        //         type: "calendar-events",
+        //         category: "celebration",
+        //         color: "#FF9800",
+        //       },
+        //       {
+        //         id: 24473,
+        //         title: "Testing2",
+        //         author: "Admin",
+        //         date: "2025/08/01",
+        //         type: "calendar-events",
+        //         category: "reminders",
+        //         color: "#7bb591",
+        //       },
+        //     ],
+        //     member_events: [
+        //       {
+        //         id: 36250,
+        //         title: "Auto Draft",
+        //         author: "Up Work",
+        //         date: null,
+        //         type: "member-events",
+        //         color: "#FF7276",
+        //       },
+        //       {
+        //         id: 36249,
+        //         title: "Auto Draft",
+        //         author: "Up Work",
+        //         date: null,
+        //         type: "member-events",
+        //         color: "#FF7276",
+        //       },
+        //       {
+        //         id: 36091,
+        //         title: "how",
+        //         author: "Up Work",
+        //         date: "2025/05/06",
+        //         type: "member-events",
+        //         color: "#FF7276",
+        //       },
+        //       {
+        //         id: 36090,
+        //         title: "Daily Journal",
+        //         author: "Up Work",
+        //         date: "2025/07/03", // 🔥 Current July
+        //         type: "member-events",
+        //         color: "#FF7276",
+        //       },
+        //       {
+        //         id: 36089,
+        //         title: "Reminder: Call Family",
+        //         author: "Up Work",
+        //         date: "2025/07/05", // 🔥 Current July
+        //         type: "member-events",
+        //         color: "#FF7276",
+        //       },
+        //       {
+        //         id: 36088,
+        //         title: "Write Poem",
+        //         author: "Up Work",
+        //         date: "2025/07/10", // 🔥 Current July
+        //         type: "member-events",
+        //         color: "#FF7276",
+        //       },
+        //     ],
+        //     calendar_default_icon_url:
+        //       "https://newstaging.memorylanetherapy.com/downloads/uploads/woocommerce-placeholder.png",
+        //     calendar_icons: [
+        //       {
+        //         id: 36092,
+        //         author: "Up Work",
+        //         date: "2025/05/01",
+        //         type: "calendar-icon",
+        //         link: "",
+        //       },
+        //       {
+        //         id: 28473,
+        //         author: "Up Work",
+        //         date: "2024/03/06",
+        //         type: "calendar-icon",
+        //         link: "https://newstaging.memorylanetherapy.com/wp-content/Event-calendar-uploads/Elegant-QA-Live-Session-Instagram-Post-17.png",
+        //       },
+        //       {
+        //         id: 28471,
+        //         author: "Up Work",
+        //         date: "2024/03/07",
+        //         type: "calendar-icon",
+        //         link: "https://newstaging.memorylanetherapy.com/wp-content/Event-calendar-uploads/Default-Calendar-Background-2.jpg",
+        //       },
+        //     ],
+        //     calendar_bg:
+        //       "https://newstaging.memorylanetherapy.com/wp-content/uploads/2023/11/Default-Calendar-Background.jpg",
+        //   },
+        // };
 
         const formatDate = (str) => {
           if (!str) return null;

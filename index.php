@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Events Calender
  * Description: Embeds Events Calender Vite-built React app into WordPress using a shortcode.
- * Version: 3.0.2208
+ * Version: 4.0.2157
  * Author: Saad ur Rehman
  */
 
@@ -23,7 +23,7 @@ function enqueue_vite_react_app() {
     // ✅ Replace with your actual Vite build filenames
     echo '<link rel="stylesheet" href="' . $plugin_url . 'assets/index-BtCzZUDj.css">';
     echo '<div id="root"></div>';
-    echo '<script type="module" src="' . $plugin_url . 'assets/index-DiqxMVZr.js"></script>';
+    echo '<script type="module" src="' . $plugin_url . 'assets/index-BrWrLsUE.js"></script>';
 
     enqueue_scripts();
 }
