@@ -126,7 +126,6 @@ export default function DownloadButtons({
 
     #evc-calendar-table {
       width: 100%;
-      height: 100%;
       border-spacing: 5px;
       table-layout: fixed;
       flex: 1;
